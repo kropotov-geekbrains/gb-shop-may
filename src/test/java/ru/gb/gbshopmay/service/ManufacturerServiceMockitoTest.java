@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import ru.gb.gbshopmay.dao.ManufacturerDao;
 import ru.gb.gbshopmay.entity.Manufacturer;
 import ru.gb.gbshopmay.web.dto.ManufacturerDto;
@@ -82,14 +80,25 @@ class ManufacturerServiceMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения
-
-
-    public static class ToManufacturerDto implements Answer<ManufacturerDto> {
-
-        @Override
-        public ManufacturerDto answer(InvocationOnMock invocation) throws Throwable {
-            return null;
-        }
+    @Test
+    void deleteByIdTest() {
+        manufacturerService.deleteById(1L);
+        then(manufacturerDao).should().deleteById(1L);
     }
+
+    @Test
+    void saveTest() {
+        Manufacturer testManufacturer = Manufacturer.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
+        ManufacturerDto testManufacturerDto = ManufacturerDto.builder()
+                .id(testManufacturer.getId())
+                .name(testManufacturer.getName())
+                .build();
+        given(manufacturerMapper.toManufacturer(any(ManufacturerDto.class))).willReturn(testManufacturer);
+        manufacturerService.save(testManufacturerDto);
+        then(manufacturerDao).should().save(testManufacturer);
+    }
+
 }
