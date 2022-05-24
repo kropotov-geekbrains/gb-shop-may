@@ -81,4 +81,54 @@ class ManufacturerServiceMockitoTest {
     }
 
     // todo дз сделать методы проверки удаления и сохранения
+
+    @Test
+    void saveTest() {
+        ManufacturerDto savedManufacturerDto = ManufacturerDto.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
+
+        given(manufacturerMapper.toManufacturer(any())).will(
+                (invocation) -> {
+                    ManufacturerDto manufacturerDto = invocation.getArgument(0);
+
+                    if (manufacturerDto == null) {
+                        return null;
+                    }
+                    return Manufacturer.builder()
+                            .id(manufacturerDto.getId())
+                            .name(manufacturerDto.getName())
+                            .build();
+                });
+
+        given(manufacturerMapper.toManufacturerDto(any())).will(
+                (invocation) -> {
+                    Manufacturer manufacturer = invocation.getArgument(0);
+
+                    if (manufacturer == null) {
+                        return null;
+                    }
+                    return ManufacturerDto.builder()
+                            .id(manufacturer.getId())
+                            .name(manufacturer.getName())
+                            .build();
+                });
+
+        manufacturerService.save(savedManufacturerDto);
+
+        then(manufacturerDao).should().save(any());
+    }
+
+    @Test
+    void deleteTest() {
+        ManufacturerDto.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
+
+        manufacturerService.deleteById(1L);
+
+        then(manufacturerDao).should().deleteById(1L);
+    }
 }

@@ -40,7 +40,7 @@ public class ManufacturerRestController {
     public ResponseEntity<?> handlePost(@Validated @RequestBody ManufacturerDto manufacturerDto) {
         ManufacturerDto savedManufacturerDto = manufacturerService.save(manufacturerDto);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/api/v1/manufacturer/" + savedManufacturerDto.getId()));
+        httpHeaders.setLocation(URI.create("/api/v1/manufacturer/" + savedManufacturerDto));
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 

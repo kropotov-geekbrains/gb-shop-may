@@ -6,9 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.gb.gbshopmay.entity.Manufacturer;
 import ru.gb.gbshopmay.service.ManufacturerService;
 import ru.gb.gbshopmay.web.dto.ManufacturerDto;
 
@@ -17,9 +19,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,6 +67,7 @@ class ManufacturerRestControllerMockitoTest {
     @Test
     void getManufacturerListTest() {
         // given
+
         given(manufacturerService.findAll()).willReturn(manufacturers);
         final int manufacturersSize = manufacturers.size();
 
@@ -80,12 +84,56 @@ class ManufacturerRestControllerMockitoTest {
     }
 
     // todo дз сделать методы проверки удаления и сохранения обычными unit тестами и mockmvc тестами (4 теста)
+
     @Test
-    void дляДомашкиНаСохранение() throws Exception {
+    void saveManufacturerTest() {
 
-//        mockMvc.perform(get("/api/v1/manufacturer")//post
-//                        .contentType()
-//                        .content("{сюда подставить json экранировать вот так \"}"))
+        ManufacturerDto savedManufacturer = ManufacturerDto.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
 
+        manufacturerRestController.handlePost(savedManufacturer);
+        then(manufacturerService).should().save(savedManufacturer);
+    }
+
+    @Test
+    void deleteManufacturerTest() {
+
+        manufacturerRestController.deleteById(2L);
+        then(manufacturerService).should().deleteById(2L);
+    }
+
+
+    @Test
+    void saveManufacturerMockMvcTest() throws Exception {
+
+        ManufacturerDto savedManufacturer = ManufacturerDto.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
+
+        given(manufacturerService.save(any(ManufacturerDto.class))).willReturn(savedManufacturer);
+        mockMvc.perform(post("/api/v1/manufacturer/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": \"1\", \"name\": \"APPLE_COMPANY_NAME\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteManufacturerMockMvcTest() throws Exception {
+
+//        ManufacturerDto.builder()
+//                .id(2L)
+//                .name(MICROSOFT_COMPANY_NAME)
+//                .build();
+//
+//        mockMvc.perform(post("/api/v1/manufacturer/")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"id\": \"2\", \"name\": \"MICROSOFT_COMPANY_NAME\"}"))
+//                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/api/v1/manufacturer/{manufacturerId}", 2))
+                .andExpect(status().isNoContent());
     }
 }
