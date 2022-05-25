@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import ru.gb.gbshopmay.config.ShopConfig;
 import ru.gb.gbshopmay.entity.Manufacturer;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,8 +42,29 @@ class ManufacturerDaoDataJpaTest {
         );
     }
 
-    // todo дз findAll, delete, update
-    // todo дз* попробовать через persistenceContext(либо через Autowoired) (через EntityManager)
+    @Test
+    public void findAllTest() {
+        Manufacturer manufacturer1 = Manufacturer.builder()
+                .name(APPLE_COMPANY_NAME)
+                .build();
+        manufacturerDao.save(manufacturer1);
+
+        Manufacturer manufacturer2 = Manufacturer.builder()
+                .name(MICROSOFT_COMPANY_NAME)
+                .build();
+        manufacturerDao.save(manufacturer2);
+
+        List<Manufacturer> manufacturerList = manufacturerDao.findAll();
+
+        assertAll(
+                () -> assertEquals(1L, manufacturerList.get(0).getId()),
+                () -> assertEquals(APPLE_COMPANY_NAME, manufacturerList.get(0).getName()),
+                () -> assertEquals(2L, manufacturerList.get(1).getId()),
+                () -> assertEquals(MICROSOFT_COMPANY_NAME, manufacturerList.get(1).getName())
+
+                );
+
+    }
 
     @Test
     public void deleteTest() {
@@ -56,6 +78,29 @@ class ManufacturerDaoDataJpaTest {
 
         assertAll(
                 () -> assertEquals(Optional.empty(), deletedManufacturer)
+        );
+    }
+
+    @Test
+    public void updateTest() {
+        Manufacturer manufacturer = Manufacturer.builder()
+                .id(1L)
+                .name(APPLE_COMPANY_NAME)
+                .build();
+        Manufacturer savedManufacturer = manufacturerDao.save(manufacturer);
+
+        Manufacturer manufacturer2 = Manufacturer.builder()
+                .id(1L)
+                .name(MICROSOFT_COMPANY_NAME)
+                .build();
+        Manufacturer updateManufacturer = manufacturerDao.save(manufacturer2);
+
+        Manufacturer testManufacturer = manufacturerDao.getById(1L);
+
+        assertAll(
+                () -> assertEquals(1L, testManufacturer.getId()),
+                () -> assertEquals(testManufacturer.getName(), updateManufacturer.getName()),
+                () -> assertEquals(testManufacturer.getId(), updateManufacturer.getId())
         );
     }
 

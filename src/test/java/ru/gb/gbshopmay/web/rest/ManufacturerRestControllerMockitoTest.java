@@ -1,11 +1,13 @@
 package ru.gb.gbshopmay.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,9 +19,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,13 +82,38 @@ class ManufacturerRestControllerMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения обычными unit тестами и mockmvc тестами (4 теста)
     @Test
-    void дляДомашкиНаСохранение() throws Exception {
-
-//        mockMvc.perform(get("/api/v1/manufacturer")//post
-//                        .contentType()
-//                        .content("{сюда подставить json экранировать вот так \"}"))
-
+    void saveTest() {
+        ManufacturerDto manufacturerDto = new ManufacturerDto(1L, APPLE_COMPANY_NAME);
+        manufacturerRestController.handlePost(manufacturerDto);
+        then(manufacturerService).should().save(manufacturerDto);
     }
+
+    @Test
+    void saveMockMvcTest() throws Exception {
+        ManufacturerDto manufacturerDto = new ManufacturerDto(1L, APPLE_COMPANY_NAME);
+
+        given(manufacturerService.save(any(ManufacturerDto.class))).willReturn(manufacturerDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(manufacturerDto);
+
+        mockMvc.perform(post("/api/v1/manufacturer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteByIdTest() {
+        manufacturerRestController.deleteById(1L);
+        then(manufacturerService).should().deleteById(1L);
+    }
+
+    @Test
+    void deleteByIdMockMvcTest() throws Exception {
+        mockMvc.perform(delete("/api/v1/manufacturer/1"))
+                .andExpect(status().isNoContent());
+    }
+
 }
