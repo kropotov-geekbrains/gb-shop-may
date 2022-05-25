@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.gb.gbshopmay.service.ManufacturerService;
 import ru.gb.gbshopmay.web.dto.ManufacturerDto;
@@ -17,9 +17,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,13 +80,58 @@ class ManufacturerRestControllerMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения обычными unit тестами и mockmvc тестами (4 теста)
     @Test
-    void дляДомашкиНаСохранение() throws Exception {
+    void saveTest() {
+        // given
+        ManufacturerDto test = ManufacturerDto.builder()
+                .id(3L)
+                .name("Xaomi")
+                .build();
 
-//        mockMvc.perform(get("/api/v1/manufacturer")//post
-//                        .contentType()
-//                        .content("{сюда подставить json экранировать вот так \"}"))
+        // when
+        manufacturerService.save(test);
 
+        // then
+        then(manufacturerService).should().save(any());
+
+        assertAll(
+                () -> assertEquals(3L, test.getId()),
+                () -> assertEquals("Xaomi", test.getName())
+        );
+    }
+
+    @Test
+    void deleteByIdTest() {
+        // given
+        given(manufacturerService.findAll()).willReturn(manufacturers);
+        final int manufacturersSize = manufacturers.size();
+
+        // when
+        manufacturerRestController.deleteById(2L);
+
+        // then
+        then(manufacturerService).should().deleteById(2L);
+
+        assertAll(
+                () -> assertEquals(1, manufacturersSize)
+        );
+    }
+
+
+    @Test
+    void saveMockMvcTest() throws Exception {
+        given(manufacturerService.save(any()));
+
+        mockMvc.perform(post("/api/v1/manufacturer/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": \"3\", \"name\": \"Xaomi\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteByIdMockMvcTest() throws Exception {
+
+        mockMvc.perform(delete("/api/v1/manufacturer/{manufacturerId}", 2))
+                .andExpect(status().isNoContent());
     }
 }
