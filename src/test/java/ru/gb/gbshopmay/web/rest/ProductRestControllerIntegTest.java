@@ -20,8 +20,7 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -56,8 +55,6 @@ class ProductRestControllerIntegTest {
                                         .build())))
                 .andExpect(status().isCreated());
 
-        assertEquals(1, manufacturerDao.findAll().size());
-
         mockMvc.perform(post("/api/v1/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper
@@ -65,6 +62,7 @@ class ProductRestControllerIntegTest {
                                         .title(IPHONE)
                                         .cost(BigDecimal.valueOf(100))
                                         .status(Status.ACTIVE)
+                                        .manufacturer(APPLE_COMPANY_NAME)
                                         .build())))
                 .andExpect(status().isCreated());
 
@@ -80,6 +78,33 @@ class ProductRestControllerIntegTest {
                 .andExpect(content().string(containsString("id")))
                 .andExpect(jsonPath("$.[0].id").value("1"))
                 .andExpect(jsonPath("$.[0].title").value(IPHONE))
-                .andExpect(jsonPath("$.[0].cost").value(BigDecimal.valueOf(100)));
+                .andExpect(jsonPath("$.[0].cost").value(BigDecimal.valueOf(100.0)));
+    }
+
+    @Test
+    @Order(2)
+    public void handleUpdateTest() throws Exception {
+
+        mockMvc.perform(post("/api/v1/product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper
+                                .writeValueAsString(ProductDto.builder()
+                                        .title(MACBOOK)
+                                        .cost(BigDecimal.valueOf(1000))
+                                        .status(Status.ACTIVE)
+                                        .manufacturer(APPLE_COMPANY_NAME)
+                                        .build())))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(2)
+    public void deleteTest() throws Exception {
+        assertEquals(2, productDao.findAll().size());
+
+        mockMvc.perform(delete("/api/v1/product/{productId}", 1))
+                .andExpect(status().isNoContent());
+
+        assertEquals(1, productDao.findAll().size());
     }
 }
