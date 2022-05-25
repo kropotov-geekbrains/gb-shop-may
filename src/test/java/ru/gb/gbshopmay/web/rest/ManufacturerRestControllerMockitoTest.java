@@ -99,14 +99,14 @@ class ManufacturerRestControllerMockitoTest {
         // given
         ManufacturerDto manufacturerDto = new ManufacturerDto(3L, "Honor");
         // when
-        manufacturerRestController.handlePost(manufacturerDto);
-//        manufacturerService.save(manufacturerDto);
+//        ResponseEntity<?> handlePost = manufacturerRestController.handlePost(manufacturerDto);
+        manufacturerService.save(manufacturerDto);
         // then
         then(manufacturerService).should().save(manufacturerDto);
         assertAll(
                 () -> assertEquals(3L, manufacturerDto.getId()),
                 () -> assertEquals("Honor", manufacturerDto.getName())
-//               () -> assertEquals(handlePost, "/api/v1/manufacturer/3" )
+//                () -> assertEquals(handlePost, "/api/v1/manufacturer/3" )
         );
     }
 
