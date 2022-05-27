@@ -82,7 +82,6 @@ class ManufacturerRestControllerMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения обычными unit тестами и mockmvc тестами (4 теста)
     @Test
     void deleteByIdMockMvcTest() throws Exception {
         mockMvc.perform(delete("/api/v1/manufacturer/1"))
