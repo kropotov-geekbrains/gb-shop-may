@@ -19,18 +19,17 @@ import java.util.stream.Collectors;
 public class CategoryService {
     private final CategoryDao categoryDao;
     private final CategoryMapper categoryMapper;
-    
+
 
     public CategoryDto save(CategoryDto categoryDto) {
         Category category = categoryMapper.toCategory(categoryDto);
         if (category.getId() != null) {
             categoryDao.findById(categoryDto.getId()).ifPresent(
-                    (p) -> category.setVersion(p.getVersion())
+                    (p) -> category.setTitle(p.getTitle())
             );
         }
         return categoryMapper.toCategoryDto(categoryDao.save(category));
     }
-
 
     @Transactional(readOnly = true)
     public CategoryDto findById(Long id) {

@@ -6,6 +6,7 @@ import ru.gb.gbshopmay.web.dto.CategoryDto;
 
 @Mapper
 public interface CategoryMapper {
+
     Category toCategory(CategoryDto categoryDto);
 
     CategoryDto toCategoryDto(Category category);

@@ -14,17 +14,15 @@ import ru.gb.gbshopmay.dao.CategoryDao;
 import ru.gb.gbshopmay.web.dto.CategoryDto;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CategoryRestControllerIntegTest {
+public class CategoryRestControllerIntegTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -61,7 +59,7 @@ class CategoryRestControllerIntegTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id")))
                 .andExpect(jsonPath("$.[0].id").value("1"))
-                .andExpect(jsonPath("$.[0].title").value(APPLE_COMPANY_NAME));
+                .andExpect(jsonPath("$.[0].name").value(MICROSOFT_COMPANY_NAME));
     }
 
 }

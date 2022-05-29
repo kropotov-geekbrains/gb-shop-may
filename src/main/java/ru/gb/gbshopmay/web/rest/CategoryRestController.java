@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.gb.gbshopmay.service.CategoryService;
 import ru.gb.gbshopmay.web.dto.CategoryDto;
 
-
 import java.net.URI;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryRestController {
+
     private final CategoryService categoryService;
 
     @GetMapping

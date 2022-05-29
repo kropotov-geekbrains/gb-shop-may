@@ -10,22 +10,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.GetMapping;
 import ru.gb.gbshopmay.dao.ProductDao;
 import ru.gb.gbshopmay.web.dto.ProductDto;
 
-import java.util.List;
-
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ProductRestControllerIntegTest {
+public class ProductRestControllerIntegTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -36,8 +33,8 @@ class ProductRestControllerIntegTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    public static final String APPLE_COMPANY_NAME = "Apple";
-    public static final String MICROSOFT_COMPANY_NAME = "Microsoft";
+    public static final String APPLE_PRODUCT = "Iphone";
+    public static final String MICROSOFT_PRODUCT = "Microsoft Office";
 
     @Test
     @Order(1)
@@ -47,7 +44,7 @@ class ProductRestControllerIntegTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper
                                 .writeValueAsString(ProductDto.builder()
-                                        .title(APPLE_COMPANY_NAME)
+                                        .title(APPLE_PRODUCT)
                                         .build())))
                 .andExpect(status().isCreated());
 
@@ -62,14 +59,6 @@ class ProductRestControllerIntegTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("id")))
                 .andExpect(jsonPath("$.[0].id").value("1"))
-                .andExpect(jsonPath("$.[0].title").value(APPLE_COMPANY_NAME));
-    }
-
-    @Test
-    @Order(3)
-    public void deletTest() throws Exception {
-
-        mockMvc.perform(delete("/api/v1/product"))
-                .andExpect(status().isNoContent());
+                .andExpect(jsonPath("$.[0].name").value(APPLE_PRODUCT));
     }
 }
