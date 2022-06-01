@@ -82,7 +82,34 @@ class ManufacturerServiceMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения
+    @Test
+    void saveManufacturerTest() {
+        //given
+        Manufacturer manufacturer = Manufacturer.builder()
+                .id(3L)
+                .name("Honor")
+                .build();
+        ManufacturerDto manufacturerDto = ManufacturerDto.builder()
+                .id(manufacturer.getId())
+                .name(manufacturer.getName())
+                .build();
+        given(manufacturerMapper.toManufacturer(any(ManufacturerDto.class))).willReturn(manufacturer);
+        // when
+        manufacturerService.save(manufacturerDto);
+        // then
+        then(manufacturerDao).should().save(manufacturer);
+        assertAll(
+//                () -> assertEquals(3, manufacturers.size(), "Size must be equals " + manufacturers.size()),
+                () -> assertEquals(3L, manufacturerDto.getId()),
+                () -> assertEquals("Honor", manufacturerDto.getName()));
+    }
+    @Test
+    void ManufacturerDeleteTest(){
+        // when
+        manufacturerService.deleteById(3L);
+        // then
+        then(manufacturerDao).should().deleteById(3L);
+    }
 
 
     public static class ToManufacturerDto implements Answer<ManufacturerDto> {

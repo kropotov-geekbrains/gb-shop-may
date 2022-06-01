@@ -3,9 +3,12 @@ package ru.gb.gbshopmay.dao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.gb.gbshopmay.config.ShopConfig;
 import ru.gb.gbshopmay.entity.Manufacturer;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +21,8 @@ class ManufacturerDaoDataJpaTest {
 
     @Autowired
     ManufacturerDao manufacturerDao;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     public void saveTest() {
@@ -39,7 +44,36 @@ class ManufacturerDaoDataJpaTest {
         );
     }
 
-    // todo дз findAll, delete, update
-    // todo дз* попробовать через persistenceContext(либо через Autowoired) (через EntityManager)
+    @Test
+    void getManufacturerListTest() {
+        entityManager.persist(Manufacturer.builder()
+                .name(APPLE_COMPANY_NAME)
+                .build());
+        entityManager.persist(Manufacturer.builder()
+                .name(MICROSOFT_COMPANY_NAME)
+                .build());
+
+        List<Manufacturer> manufacturerList = manufacturerDao.findAll();
+
+        assertAll(
+//                () -> assertEquals(manufacturersSize, manufacturerList.size(), "Size must be equals " + manufacturersSize),
+                () -> assertEquals(APPLE_COMPANY_NAME, manufacturerList.get(0).getName())
+        );
+    }
+
+    @Test
+    public void deleteTest() {
+        Manufacturer manufacturer = Manufacturer.builder()
+                .name(APPLE_COMPANY_NAME)
+                .build();
+
+        Manufacturer savedManufacturer = manufacturerDao.save(manufacturer);
+
+        manufacturerDao.delete(savedManufacturer);
+
+        assertAll(
+                () -> assertNotNull(savedManufacturer.getName())
+        );
+    }
 
 }

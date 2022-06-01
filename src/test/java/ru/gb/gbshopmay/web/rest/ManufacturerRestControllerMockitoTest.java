@@ -6,8 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.gb.gbshopmay.service.ManufacturerService;
 import ru.gb.gbshopmay.web.dto.ManufacturerDto;
@@ -17,9 +19,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,13 +82,98 @@ class ManufacturerRestControllerMockitoTest {
         );
     }
 
-    // todo дз сделать методы проверки удаления и сохранения обычными unit тестами и mockmvc тестами (4 теста)
     @Test
-    void дляДомашкиНаСохранение() throws Exception {
-
-//        mockMvc.perform(get("/api/v1/manufacturer")//post
-//                        .contentType()
-//                        .content("{сюда подставить json экранировать вот так \"}"))
-
+    void ManufacturerSaveTest() {
+        // given
+        ManufacturerDto manufacturerDto = new ManufacturerDto(3L, "Honor");
+        // when
+//        ResponseEntity<?> handlePost = manufacturerRestController.handlePost(manufacturerDto);
+        manufacturerService.save(manufacturerDto);
+        // then
+        then(manufacturerService).should().save(manufacturerDto);
+        assertAll(
+                () -> assertEquals(3L, manufacturerDto.getId()),
+                () -> assertEquals("Honor", manufacturerDto.getName())
+//                () -> assertEquals(handlePost, "/api/v1/manufacturer/3" )
+        );
     }
+
+    @Test
+    void ManufacturerDeleteTest(){
+        // when
+        manufacturerRestController.deleteById(1L);
+        // then
+        then(manufacturerService).should().deleteById(1L);
+    }
+
+    @Test
+    void ManufacturerSaveMockMvcTest() throws Exception {
+        //given
+        ManufacturerDto manufacturerDto = new ManufacturerDto(3L, "Honor");
+        given(manufacturerService.save(any(ManufacturerDto.class))).willReturn(manufacturerDto);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        System.out.println(objectMapper.writeValueAsString(manufacturerDto));
+        mockMvc.perform(post("/api/v1/manufacturer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\" :\"Honor\",\"id\":\"3\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteByIdMockMvcTest() throws Exception {
+        mockMvc.perform(delete("/api/v1/manufacturer/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void handlePostTest() throws Exception {
+        given(manufacturerService.save(any())).will(
+                (invocation) -> {
+                    ManufacturerDto manufacturerDto = invocation.getArgument(0);
+
+                    if (manufacturerDto == null) {
+                        return null;
+                    }
+
+                    return ManufacturerDto.builder()
+                            .id(manufacturerDto.getId())
+                            .name(manufacturerDto.getName())
+                            .build();
+                });
+
+        mockMvc.perform(post("/api/v1/manufacturer/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": \"1\", \"name\": \"test\"}"))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteByIdTest() throws Exception {
+
+        mockMvc.perform(delete("/api/v1/manufacturer/{manufacturerId}", 1))
+                .andExpect(status().isNoContent());
+
+        given(manufacturerService.save(any())).will(
+                (invocation) -> {
+                    ManufacturerDto manufacturerDto = invocation.getArgument(0);
+
+                    if (manufacturerDto == null) {
+                        return null;
+                    }
+
+                    return ManufacturerDto.builder()
+                            .id(manufacturerDto.getId())
+                            .name(manufacturerDto.getName())
+                            .build();
+                });
+
+        mockMvc.perform(post("/api/v1/manufacturer/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": \"1\", \"name\": \"test\"}"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/api/v1/manufacturer/{manufacturerId}", 1))
+                .andExpect(status().isNoContent());
+    }
+
 }
