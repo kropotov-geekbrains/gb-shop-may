@@ -116,7 +116,62 @@ class ManufacturerServiceMockitoTest {
 
         @Override
         public ManufacturerDto answer(InvocationOnMock invocation) throws Throwable {
-            return null;
+            Manufacturer manufacturer = (Manufacturer) invocation.getArgument(0);
+
+            if (manufacturer == null) {
+                return null;
+            }
+
+            return ManufacturerDto.builder()
+                    .id(manufacturer.getId())
+                    .name(manufacturer.getName())
+                    .build();
         }
     }
+
+    public static class ToManufacturer implements Answer<Manufacturer> {
+
+        @Override
+        public Manufacturer answer(InvocationOnMock invocation) throws Throwable {
+            ManufacturerDto manufacturerDto = (ManufacturerDto) invocation.getArgument(0);
+
+            if (manufacturerDto == null) {
+                return null;
+            }
+
+            return Manufacturer.builder()
+                    .id(manufacturerDto.getId())
+                    .name(manufacturerDto.getName())
+                    .build();
+        }
+    }
+
+    @Test
+    void saveTest() {
+        // given
+        ManufacturerDto testDto = ManufacturerDto.builder()
+                .id(1L)
+                .name("test")
+                .build();
+        given(manufacturerMapper.toManufacturer(any())).will(new ToManufacturer());
+        given(manufacturerMapper.toManufacturerDto(any())).will(new ToManufacturerDto());
+
+
+        // when
+        manufacturerService.save(testDto);
+
+        // then
+        then(manufacturerDao).should().findById(1L);
+        then(manufacturerDao).should().save(any());
+    }
+
+    @Test
+    void deleteTest() {
+        // when
+        manufacturerService.deleteById(1L);
+        // then
+        then(manufacturerDao).should().deleteById(1L);
+    }
+
+
 }
