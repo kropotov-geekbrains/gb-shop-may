@@ -5,11 +5,11 @@ spring:
     config:
       server:
         git:
-          uri: ${GIT_URI:/Users/artemkropotov/java_projects/geekbrains/gb-settings-may}
+          uri: ${GIT_URI:/home/aleksey/IdeaProjects/geekbrains/2022/may/gb-settings-may}
           clone-on-start: true
           username: ${GIT_USERNAME:geek}
           password: ${GIT_PASSWORD:geek}
-        default-label: master
+        default-label: Homework_Lesson4
   security:
     user:
       name: ${SECURITY_USER:geek_user}

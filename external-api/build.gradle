@@ -21,7 +21,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2021.0.3-SNAPSHOT")
+    set('springCloudVersion', "2021.0.3")
 }
 
 dependencies {
@@ -36,7 +36,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation files('../lib/gb-api-may-0.0.5-plain.jar')
+    implementation files('../lib/gb-api-may-0.0.8-plain.jar')
 }
 
 dependencyManagement {

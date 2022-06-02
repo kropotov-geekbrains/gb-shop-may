@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 // todo  REST exception
 @ControllerAdvice
@@ -28,5 +30,11 @@ public class ControllerExceptionHandler {
                             fieldError.getRejectedValue()));
                 });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> noSuchElementExceptionHandler (NoSuchElementException e) {
+
+        return new ResponseEntity<>("Conflicted request: " + e.getLocalizedMessage(), HttpStatus.CONFLICT);
     }
 }
