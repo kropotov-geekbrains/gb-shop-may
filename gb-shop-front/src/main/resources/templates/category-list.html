@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="components/header :: header('Category List')"></div>
+</head>
+<body>
+
+
+<div th:replace="~{components/navbar :: navi(CategoryList)}"></div>
+
+<div class="container">
+    <span th:if="${categories.size() == 0}">Категории отсутствуют</span>
+    <div th:unless="${categories.size() == 0}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category, i : ${categories}"
+                th:attr="index=${category.id}">
+                <th scope="row" th:text="${i.count}"></th>
+                <td th:text="${category.title}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div th:replace="~{components/footer :: footerBlock}"/>
+
+
+</body>
+</html>
