@@ -7,7 +7,7 @@ spring:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://127.0.0.1:8888}
   cloud:
     config:
-      label: ${SPRING_CLOUD_CONFIG_LABEL:master}
+      label: ${SPRING_CLOUD_CONFIG_LABEL:Homework_Lesson4}
       username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
       password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
 

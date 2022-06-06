@@ -9,6 +9,7 @@ import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 
 import java.util.List;
 
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/manufacturer")

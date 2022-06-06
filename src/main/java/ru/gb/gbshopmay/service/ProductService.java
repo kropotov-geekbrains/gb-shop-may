@@ -30,9 +30,13 @@ public class ProductService {
     public ProductDto save(ProductDto productDto) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
         if (product.getId() != null) {
-            productDao.findById(productDto.getId()).ifPresent(
-                    (p) -> product.setVersion(p.getVersion())
-            );
+            if(!manufacturerDao.findByName(product.getManufacturer().getName()).isPresent()) {
+                System.out.println(product.getCategories().toString());
+            } else {
+                productDao.findById(productDto.getId()).ifPresent(
+                        (p) -> product.setVersion(p.getVersion())
+                );
+            }
         }
         return productMapper.toProductDto(productDao.save(product));
     }

@@ -42,7 +42,7 @@ public class Product extends InfoEntity {
     @JoinTable(name = "product_category",
     joinColumns = @JoinColumn(name = "product_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> carts;
+    private Set<Category> categories;
 
     @Override
     public String toString() {
@@ -58,13 +58,13 @@ public class Product extends InfoEntity {
     @Builder
     public Product(Long id, int version, String createdBy, LocalDateTime createdDate, String lastModifiedBy,
                    LocalDateTime lastModifiedDate, String title, BigDecimal cost, LocalDate manufactureDate,
-                   Manufacturer manufacturer, Status status, Set<Category> carts) {
+                   Manufacturer manufacturer, Status status, Set<Category> categories) {
         super(id, version, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
         this.title = title;
         this.cost = cost;
         this.manufactureDate = manufactureDate;
         this.manufacturer = manufacturer;
         this.status = status;
-        this.carts = carts;
+        this.categories = categories;
     }
 }
