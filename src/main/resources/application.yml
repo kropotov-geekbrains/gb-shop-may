@@ -7,8 +7,12 @@ spring:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://127.0.0.1:8888}
   cloud:
     config:
-      label: master
-      username: geek_user
-      password: geek_pass
+      label: ${SPRING_CLOUD_CONFIG_LEVEL:master}
+      username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
+      password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/gb_shop"
+    username: "geek"
+    password: "geek"
 # /{label}/{application}-{profile}.yml
 # /{application}/{profile}/{label}

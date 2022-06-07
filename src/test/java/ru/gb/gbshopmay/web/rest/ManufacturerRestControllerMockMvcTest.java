@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbshopmay.service.ManufacturerService;
-import ru.gb.gbshopmay.web.dto.ManufacturerDto;
 
 import java.util.ArrayList;
 import java.util.List;

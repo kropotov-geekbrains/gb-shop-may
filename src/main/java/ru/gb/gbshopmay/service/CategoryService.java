@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbshopmay.dao.CategoryDao;
 import ru.gb.gbshopmay.entity.Category;
-import ru.gb.gbshopmay.web.dto.CategoryDto;
 import ru.gb.gbshopmay.web.dto.mapper.CategoryMapper;
 
 import java.util.List;

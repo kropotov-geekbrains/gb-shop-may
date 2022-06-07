@@ -2,8 +2,8 @@ package ru.gb.gbshopmay.web.dto.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbshopmay.entity.Manufacturer;
-import ru.gb.gbshopmay.web.dto.ManufacturerDto;
 
 @Mapper
 public interface ManufacturerMapper {

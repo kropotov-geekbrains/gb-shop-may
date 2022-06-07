@@ -1,8 +1,8 @@
-package ru.gb.gbshopmay.web.dto;
+package ru.gb.gbapimay.category.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @Builder
 public class CategoryDto {
+
     private Long id;
-    @NotBlank
     private String title;
 }

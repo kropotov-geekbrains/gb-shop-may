@@ -6,9 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbshopmay.service.ProductService;
-import ru.gb.gbshopmay.web.dto.ProductDto;
-import ru.gb.gbshopmay.web.dto.ProductManufacturerDto;
 
 import java.net.URI;
 import java.util.List;
@@ -23,11 +22,6 @@ public class ProductRestController {
     @GetMapping
     public List<ProductDto> getProductList() {
         return productService.findAll();
-    }
-
-    @GetMapping("/info")
-    public List<ProductManufacturerDto> getFullInfoProductList() {
-        return productService.findFullInfo();
     }
 
     @GetMapping("/{productId}")

@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbshopmay.dao.ManufacturerDao;
 import ru.gb.gbshopmay.dao.ProductDao;
 import ru.gb.gbshopmay.entity.Product;
 import ru.gb.gbshopmay.entity.enums.Status;
-import ru.gb.gbshopmay.web.dto.ProductDto;
-import ru.gb.gbshopmay.web.dto.ProductManufacturerDto;
 import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
 import java.util.List;
@@ -76,11 +75,4 @@ public class ProductService {
         });
     }
 
-
-    public List<ProductManufacturerDto> findFullInfo() {
-        return productDao.findAll()
-                .stream()
-                .map(productMapper::toProductManufacturerDto)
-                .collect(Collectors.toList());
-    }
 }

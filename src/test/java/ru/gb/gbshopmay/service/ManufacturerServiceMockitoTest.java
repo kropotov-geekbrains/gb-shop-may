@@ -8,9 +8,9 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbshopmay.dao.ManufacturerDao;
 import ru.gb.gbshopmay.entity.Manufacturer;
-import ru.gb.gbshopmay.web.dto.ManufacturerDto;
 import ru.gb.gbshopmay.web.dto.mapper.ManufacturerMapper;
 
 import java.util.ArrayList;

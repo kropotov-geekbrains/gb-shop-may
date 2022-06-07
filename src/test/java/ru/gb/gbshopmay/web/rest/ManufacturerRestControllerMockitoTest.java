@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbshopmay.service.ManufacturerService;
-import ru.gb.gbshopmay.web.dto.ManufacturerDto;
 
 import java.util.ArrayList;
 import java.util.List;
