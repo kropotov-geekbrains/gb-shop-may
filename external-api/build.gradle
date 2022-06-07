@@ -14,6 +14,12 @@ configurations {
     }
 }
 
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring'
+    ]
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/snapshot' }
@@ -27,16 +33,27 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.cloud:spring-cloud-starter'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
+
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation files('../lib/gb-api-may-0.0.5-plain.jar')
+    implementation files('../lib/gb-api-may-0.0.8-plain.jar')
 }
 
 dependencyManagement {
