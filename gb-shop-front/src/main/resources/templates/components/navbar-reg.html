@@ -19,22 +19,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeTab == 'ProductList' ? 'active' : ''}" aria-current="page" th:href="@{/product/list}">Список продуктов</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeTab == 'ManufacturerList' ? 'active' : ''}" aria-current="page" th:href="@{/manufacturer/list}">Список производителей</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:classappend="${activeTab == 'CategoryList' ? 'active' : ''}" aria-current="page" th:href="@{/category/list}">Список категорий</a>
-                </li>
-            </ul>
+<!--            <ul class="navbar-nav">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" th:classappend="${activeTab == 'ProductList' ? 'active' : ''}" aria-current="page" th:href="@{/product/list}">Список продуктов</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" th:classappend="${activeTab == 'ManufacturerList' ? 'active' : ''}" aria-current="page" th:href="@{/manufacturer/list}">Список производителей</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" th:classappend="${activeTab == 'CategoryList' ? 'active' : ''}" aria-current="page" th:href="@{/category/list}">Список категорий</a>-->
+<!--                </li>-->
+<!--            </ul>-->
         </div>
 <!--        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">-->
 <!--            <input type="submit"  class="btn btn-danger" value="Logout">-->
 <!--        </form>-->
-<!--        <a sec:authorize="isAnonymous()" class="btn btn-success" th:href="@{/login}">Login</a>-->
         <a class="btn btn-success" th:href="@{/registration}">Registration</a>
     </div>
 </nav>

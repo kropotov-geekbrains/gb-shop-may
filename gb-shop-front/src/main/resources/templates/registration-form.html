@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="components/header :: header('Registration')"></div>
+</head>
+<body>
+
+
+<div th:replace="~{components/navbar-reg :: navi(Registration)}"></div>
+<div class="container">
+    <form class="row g-3 needs-validation" th:object="${userDto}" th:action="@{/registration}" method="post">
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="username">Username</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{username}">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="password">Password</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{password}">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="firstName">First Name</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{firstname}">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="lastName">Last Name</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{lastname}">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="email">Email</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{email}">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="phone">Phone</span>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" th:field="*{phone}">
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Register</button>
+        </div>
+    </form>
+
+</div>
+<div th:replace="~{components/footer :: footerBlock}"/>
+
+
+</body>
+</html>

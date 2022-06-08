@@ -33,13 +33,13 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
     private final AccountRoleDao accountRoleDao;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private UserService userService;
+//    private UserService userService;
 
-    @Autowired
-    @Lazy
-    public void setUserService(JpaUserDetailService jpaUserDetailService) {
-        this.userService = jpaUserDetailService;
-    }
+//    @Autowired
+//    @Lazy
+//    public void setUserService(JpaUserDetailService jpaUserDetailService) {
+//        this.userService = jpaUserDetailService;
+//    }
 
     @Override
     @Transactional
