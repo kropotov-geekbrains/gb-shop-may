@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="components/header :: header('User Product List')"></div>
+</head>
+<body>
+
+
+<div th:replace="~{components/navbar :: navi(ProductList)}"></div>
+
+<div class="container">
+    <span th:if="${products.size() == 0}">Товаров нет</span>
+    <div th:unless="${products.size() == 0}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Наименование</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Производитель</th>
+                <th scope="col">Категории</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product, i : ${products}"
+                th:attr="index=${product.id}">
+
+                <th scope="row" th:text="${i.count}"></th>
+                <td th:text="${product.title}"></td>
+                <td th:text="${product.cost}"></td>
+                <td th:text="${product.manufacturer}"></td>
+                <td th:each="category, t: ${product.categories}">
+                    <span th:text="${category.title} "></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div th:replace="~{components/footer :: footerBlock}"/>
+
+
+</body>
+</html>
