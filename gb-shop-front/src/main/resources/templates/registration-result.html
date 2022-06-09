@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="components/header :: header('Registration')"></div>
+</head>
+<body>
+
+
+<div th:replace="~{components/navbar-reg :: navi(Registration)}"></div>
+<div class="container">
+    <h4 th:text ="${message}"></h4>
+
+</div>
+<div th:replace="~{components/footer :: footerBlock}"/>
+
+
+</body>
+</html>

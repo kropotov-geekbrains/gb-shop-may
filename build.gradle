@@ -51,7 +51,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
 
-    implementation files('lib/gb-api-may-0.0.8-plain.jar')
+    implementation files('lib/gb-api-may-0.0.9-plain.jar')
 }
 
 dependencyManagement {

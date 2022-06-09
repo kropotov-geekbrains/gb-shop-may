@@ -7,11 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.externalapi.entity.security.AccountUser;
 import ru.gb.externalapi.service.UserService;
 import ru.gb.gbapimay.security.UserDto;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -40,10 +43,19 @@ public class UserRestController {
 
     @PostMapping
     public ResponseEntity<?> handlePost(@Validated @RequestBody UserDto userDto) {
-        UserDto savedUserDto = userService.register(userDto);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/api/v1/user/" + savedUserDto.getId()));
-        return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        try {
+            UserDto savedUserDto = userService.register(userDto);
+            httpHeaders.setLocation(URI.create("/api/v1/user/" + savedUserDto.getId()));
+            return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        } catch (Exception e) {
+            Map<String, String> body = new HashMap<>();
+            body.put("apiError", e.getClass().getSimpleName());
+            return new ResponseEntity<>(body, httpHeaders, HttpStatus.BAD_REQUEST);
+        }
+
+
+
     }
 
     @PutMapping("/{userId}")

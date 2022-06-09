@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                (requests) -> {
 //                    requests.antMatchers(LOGIN_ENDPOINT).permitAll();
 //                    requests.antMatchers(REGISTRATION_ENDPOINT).permitAll();
+//                    requests.antMatchers(USER_ENDPOINT).permitAll();
 //                    requests.anyRequest().authenticated();
 //                }
 //        );

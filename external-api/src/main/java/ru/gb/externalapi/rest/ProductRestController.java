@@ -28,6 +28,7 @@ public class ProductRestController {
 
     @PostMapping
     public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto) {
+        System.out.println("product "+productDto.getTitle());
         return productGateway.handlePost(productDto);
     }
 
