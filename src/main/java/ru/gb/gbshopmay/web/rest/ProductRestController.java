@@ -38,11 +38,21 @@ public class ProductRestController {
 
     @PostMapping
     public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto) {
-        ProductDto savedProductDto = productService.save(productDto);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProductDto.getId()));
-        return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        if (productService.presenceCheckManufacturer(productDto.getManufacturer()) && productService.presenceCheckCategory(productDto.getCategories())){
+            ProductDto savedProductDto = productService.save(productDto);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProductDto.getId()));
+            return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        }else return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
+
+//    @PostMapping
+//    public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto) {
+//        ProductDto savedProductDto = productService.save(productDto);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProductDto.getId()));
+//        return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/{productId}")
     public ResponseEntity<?> handleUpdate(@PathVariable("productId") Long id, @Validated @RequestBody ProductDto productDto) {

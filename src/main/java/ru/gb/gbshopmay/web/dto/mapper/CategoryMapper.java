@@ -7,6 +7,6 @@ import ru.gb.gbshopmay.entity.Category;
 @Mapper
 public interface CategoryMapper {
     Category toCategory(CategoryDto categoryDto);
-
     CategoryDto toCategoryDto(Category category);
+
 }

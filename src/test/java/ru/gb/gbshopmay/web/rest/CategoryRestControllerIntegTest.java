@@ -2,10 +2,7 @@ package ru.gb.gbshopmay.web.rest;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +36,7 @@ class CategoryRestControllerIntegTest {
 
     @Test
     @Order(1)
+//    @Disabled
     public void saveTest() throws Exception {
 
         mockMvc.perform(post("/api/v1/category")
@@ -54,6 +52,7 @@ class CategoryRestControllerIntegTest {
 
     @Test
     @Order(2)
+//    @Disabled
     public void findAllTest() throws Exception {
 
         mockMvc.perform(get("/api/v1/category"))

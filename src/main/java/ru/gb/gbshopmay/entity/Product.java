@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -38,12 +39,11 @@ public class Product {
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "product_category",
-//            joinColumns = @JoinColumn(name = "product_id"),
-//            inverseJoinColumns = @JoinColumn(name = "category_id"))
-//
-//    private List<Category> categoryList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
     @Version
     @Column(name = "VERSION")

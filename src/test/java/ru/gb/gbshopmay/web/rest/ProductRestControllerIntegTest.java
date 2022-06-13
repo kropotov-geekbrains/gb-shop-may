@@ -7,12 +7,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.common.enums.Status;
 import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbapimay.product.dto.ProductDto;
+import ru.gb.gbshopmay.dao.CategoryDao;
 import ru.gb.gbshopmay.dao.ManufacturerDao;
 import ru.gb.gbshopmay.dao.ProductDao;
 import java.math.BigDecimal;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,25 +38,36 @@ class ProductRestControllerIntegTest {
     ManufacturerDao manufacturerDao;
 
     @Autowired
+    CategoryDao categoryDao;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     public static final String MACBOOK = "MacBook";
-    public static final String APPLE_COMPANY_NAME = "Apple";
+    public static final String APPLE = "Apple";
+    Set<CategoryDto> categories;
+    public static final String FOOD = "Food";
 
     @Test
     @Order(1)
-    @Disabled
+//    @Disabled
     public void saveTest() throws Exception {
 
         mockMvc.perform(post("/api/v1/manufacturer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper
                                 .writeValueAsString(ManufacturerDto.builder()
-                                        .name(APPLE_COMPANY_NAME)
+                                        .name(APPLE)
                                         .build())))
                 .andExpect(status().isCreated());
 
-        assertEquals(1, manufacturerDao.findAll().size());
+        mockMvc.perform(post("/api/v1/category")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper
+                                .writeValueAsString(CategoryDto.builder()
+                                        .title(FOOD)
+                                        .build())))
+                .andExpect(status().isCreated());
 
         mockMvc.perform(post("/api/v1/product")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +76,8 @@ class ProductRestControllerIntegTest {
                                         .title(MACBOOK)
                                         .cost(BigDecimal.valueOf(1))
                                         .status(Status.ACTIVE)
-                                        .manufacturer(APPLE_COMPANY_NAME)
+                                        .manufacturer(APPLE)
+                                        .categories(categories)
                                         .build())))
                 .andExpect(status().isCreated());
 

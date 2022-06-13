@@ -8,6 +8,5 @@ import ru.gb.gbshopmay.entity.Manufacturer;
 @Mapper
 public interface ManufacturerMapper {
     Manufacturer toManufacturer(ManufacturerDto manufacturerDto);
-
     ManufacturerDto toManufacturerDto(Manufacturer manufacturer);
 }

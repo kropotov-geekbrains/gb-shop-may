@@ -10,10 +10,13 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.support.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.gb.gbapimay.category.api.CategoryGateway;
 import ru.gb.gbapimay.manufacturer.api.ManufacturerGateway;
+import ru.gb.gbapimay.product.api.ProductGateway;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,8 +25,10 @@ import static feign.FeignException.errorStatus;
 @Configuration
 //@EnableConfigurationProperties(GbApiProperties.class)
 //@RequiredArgsConstructor
-@EnableFeignClients(clients = {ManufacturerGateway.class})
+@EnableFeignClients(clients = {ProductGateway.class, ManufacturerGateway.class, CategoryGateway.class})
+
 public class FeignConfig {
+//    @FeignClient(url = "http://localhost:8080/api/v1/manufacturer", name = "ManufacturerGateway")
 
 //    private final ObjectFactory<HttpMessageConverters> messageConverters;
 //    private final ObjectProvider<HttpMessageConverterCustomizer> customizers;
