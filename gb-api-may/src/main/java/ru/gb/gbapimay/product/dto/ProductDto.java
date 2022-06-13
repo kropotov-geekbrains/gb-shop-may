@@ -1,11 +1,13 @@
 package ru.gb.gbapimay.product.dto;
 
 import lombok.*;
+import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.common.enums.Status;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Setter
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class ProductDto {
     private Long id;
     @NotBlank
@@ -26,5 +29,5 @@ public class ProductDto {
     @NotNull
     private Status status;
     private String manufacturer;
-//    private Set<CategoryDto> categories;
+    private Set<CategoryDto> categories;
 }
