@@ -7,3 +7,21 @@ spring:
   datasource:
     hikari:
       driver-class-name: 'org.h2.Driver'
+#  cloud:
+#    config:
+#      enabled: false
+
+gb.api:
+  endpoint:
+    manufacturer-url: 'stub'
+    category-url: 'stub'
+    product-url: 'stub'
+  connection:
+    period: 100
+    max-period: 10000 #Millis
+    max-attempts: 3
+    connect-timeout: 10000 #Millis
+    #    connect-timeout-unit:
+    read-timeout: 30000 #Millis
+    #    read-timeout-unit:
+    follow-redirects: true

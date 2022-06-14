@@ -32,18 +32,6 @@ public class ProductService {
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
 
-//    @Transactional
-//    public void init() {
-////        Manufacturer testManufacturer = Manufacturer.builder()
-////                .name("Test")
-////                .products(new HashSet<>(productDao.findAll()))
-////                .build();
-////
-////        manufacturerDao.save(testManufacturer);
-//        Product product = productDao.findById(3L).get();
-//        product.setManufacturer(manufacturerDao.findById(2L).get());
-//        productDao.save(product);
-//    }
 
     public ProductDto save(ProductDto productDto) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);

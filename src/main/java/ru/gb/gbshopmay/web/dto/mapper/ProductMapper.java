@@ -23,7 +23,9 @@ public interface ProductMapper {
 
 
     default Manufacturer getManufacturer(String manufacturer, @Context ManufacturerDao manufacturerDao) {
-        return manufacturerDao.findByName(manufacturer).orElseThrow(NoSuchElementException::new);
+        return manufacturerDao.findByName(manufacturer).orElseThrow(
+                () -> new NoSuchElementException("There isn't manufacturer with name " + manufacturer)
+        );
     }
 
     default String getManufacturer(Manufacturer manufacturer) {

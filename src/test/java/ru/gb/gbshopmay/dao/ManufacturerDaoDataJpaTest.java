@@ -54,11 +54,7 @@ class ManufacturerDaoDataJpaTest {
                 .build());
 
         List<Manufacturer> manufacturerList = manufacturerDao.findAll();
-
-        assertAll(
-//                () -> assertEquals(manufacturersSize, manufacturerList.size(), "Size must be equals " + manufacturersSize),
-                () -> assertEquals(APPLE_COMPANY_NAME, manufacturerList.get(0).getName())
-        );
+        assertEquals(APPLE_COMPANY_NAME, manufacturerList.get(0).getName());
     }
 
     @Test
@@ -70,10 +66,7 @@ class ManufacturerDaoDataJpaTest {
         Manufacturer savedManufacturer = manufacturerDao.save(manufacturer);
 
         manufacturerDao.delete(savedManufacturer);
-
-        assertAll(
-                () -> assertNotNull(savedManufacturer.getName())
-        );
+        assertNotNull(savedManufacturer.getName());
     }
 
 }
