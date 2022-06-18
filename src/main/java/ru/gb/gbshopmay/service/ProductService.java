@@ -6,7 +6,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.gbapimay.category.dto.CategoryDto;
-import ru.gb.gbapimay.manufacturer.dto.ManufacturerDto;
 import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbshopmay.dao.CategoryDao;
 import ru.gb.gbshopmay.dao.ManufacturerDao;

@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          uri: ${GIT_URI:\C:\Users\Evgeniy\IdeaProjects\gb-settings-may}
+          uri: ${GIT_URI:\C:\Users\79130\IdeaProjects\gb-settings-may}
           clone-on-start: true
           username: ${GIT_USERNAME:geek}
           password: ${GIT_PASSWORD:geek}
