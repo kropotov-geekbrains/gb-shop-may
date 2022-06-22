@@ -34,6 +34,9 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -51,7 +54,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
 
-    implementation files('lib/gb-api-may-0.0.9-plain.jar')
+    implementation files('lib/gb-api-may-0.0.14-plain.jar')
 }
 
 dependencyManagement {

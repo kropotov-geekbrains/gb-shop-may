@@ -7,10 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-/**
- * @author Artem Kropotov
- * created at 29.05.2022
- **/
 @Getter
 @Setter
 @NoArgsConstructor

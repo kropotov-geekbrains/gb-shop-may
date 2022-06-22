@@ -14,10 +14,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 import java.time.LocalDateTime;
 
-/**
- * @author Artem Kropotov
- * created at 29.05.2022
- **/
 @Getter
 @Setter
 @NoArgsConstructor

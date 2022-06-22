@@ -1,4 +1,4 @@
-package ru.gb.gbshopmay.web.conntroller;
+package ru.gb.gbshopmay.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
