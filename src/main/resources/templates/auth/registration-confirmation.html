@@ -12,15 +12,22 @@
             crossorigin="anonymous"></script>
 </head>
 
-
 <!-- todo дз 9 добавить форму ввода кода подтверждения-->
 <body>
 <div th:replace="~{common/navbar :: navi(Confirmation)}"/>
 <div class="container">
-    <h2 th:text="'Пользователь ' + ${username} +  ' успешно  зарегестирован!'"></h2>
-    <hr>
-    <p>Для входа перейдите по <a th:href="@{/auth/login}">ссылке</a></p>
-</div>
-<div th:replace="~{common/footer :: footerBlock}"/>
+    <div id="loginbox" style="margin-top: 50px;" class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+        <h2 th:text="'Пользователь ' + ${username} +  ' успешно  зарегистирован!'"></h2>
+        <hr>
+        <div class="form">
+            <h7> Введите код подтверждения</h7>
+            <input type="text" name="confirmationToken" placeholder="Код подтверждения" class="form-control"/>
+<!--            <a href="/auth/confirmToken"> Отправить код подтверждения </a>-->
+        </div>
+        <hr>
+        <p>Для входа перейдите по <a th:href="@{/auth/login}">ссылке</a></p>
+        <div/>
+    </div>
+    <div th:replace="~{common/footer :: footerBlock}"/>
 </body>
 </html>
