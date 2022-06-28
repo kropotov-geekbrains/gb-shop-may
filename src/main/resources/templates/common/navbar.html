@@ -30,6 +30,10 @@
                     <a class="nav-link" th:classappend="${activeTab == 'Cart' ? 'active' : ''}" th:href="@{/cart}"
                        th:text="'Корзина(' + ${session.cart == null ? '0)' : session.cart.totalQuantity + ')'}"></a>
                 </li>
+                <li sec:authorize="hasAuthority('product.create')" class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'OrderList' ? 'active' : ''}" th:href="@{/order}"
+                       th:text="'Заказ(' + ${session.order == null ? '0)' : session.order.totalQuantity + ')'}"></a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="post">
                         <input type="submit" class="btn btn-danger" value="Выйти"/>
