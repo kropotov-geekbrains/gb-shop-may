@@ -3,10 +3,13 @@ package ru.gb.gbshopmay.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.product.dto.ProductDto;
+import ru.gb.gbshopmay.config.JmsConfig;
 import ru.gb.gbshopmay.dao.CategoryDao;
 import ru.gb.gbshopmay.dao.ManufacturerDao;
 import ru.gb.gbshopmay.dao.ProductDao;
@@ -14,6 +17,7 @@ import ru.gb.gbshopmay.entity.Category;
 import ru.gb.gbshopmay.entity.Manufacturer;
 import ru.gb.gbshopmay.entity.Product;
 import ru.gb.gbshopmay.entity.enums.Status;
+import ru.gb.gbshopmay.modelMessage.ChangePricedMessage;
 import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
 import java.util.ArrayList;
@@ -30,17 +34,48 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
+    private final JmsTemplate jmsTemplate;
 
 
+//    public ProductDto save(ProductDto productDto) {
+//        Product product = productMapper.toProduct(productDto, manufacturerDao);
+//        if (product.getId() != null) {
+//            productDao.findById(productDto.getId()).ifPresent(
+//                    (p) -> product.setVersion(p.getVersion())
+//            );
+//        }
+//        return productMapper.toProductDto(productDao.save(product));
+//    }
     public ProductDto save(ProductDto productDto) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
+        Product productDB = productDao.getById(productDto.getId());
         if (product.getId() != null) {
-            productDao.findById(productDto.getId()).ifPresent(
-                    (p) -> product.setVersion(p.getVersion())
-            );
+            if (productDto.getCost().equals(productDB.getCost())){
+                productDao.findById(productDto.getId()).ifPresent(
+                        (p) -> product.setVersion(p.getVersion()));
+            } else {
+                sendMessage(productDto);
+                productDao.findById(productDto.getId()).ifPresent(
+                        (p) -> product.setVersion(p.getVersion()));
+            }
         }
         return productMapper.toProductDto(productDao.save(product));
     }
+
+
+
+    @Scheduled(fixedRate = 10000)
+    public void sendMessage(ProductDto productDto) {
+        ChangePricedMessage message = ChangePricedMessage.builder()
+                .message("The cost of the product " + productDto + " has changed, the new price: " + productDto.getCost())
+                .build();
+        jmsTemplate.convertAndSend(JmsConfig.CHANGE_PRICE_PRODUCT_QUEUE, message);
+    }
+
+//    public void update(ProductDto productDto){
+//        productDao.findById(productDto.getId()).ifPresent(
+//                (p) -> product.setVersion(p.getVersion()));
+//    }
 
 
     @Transactional(readOnly = true)
