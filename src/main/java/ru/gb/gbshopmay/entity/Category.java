@@ -18,6 +18,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
+
 @Table(name = "CATEGORY")
 @EntityListeners(AuditingEntityListener.class)
 public class Category extends InfoEntity {
