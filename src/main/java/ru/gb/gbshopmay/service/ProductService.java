@@ -62,12 +62,11 @@ public class ProductService {
         return productMapper.toProductDto(productDao.save(product));
     }
 
-
-
-    @Scheduled(fixedRate = 10000)
+//    @Scheduled(fixedRate = 1000)
     public void sendMessage(ProductDto productDto) {
         ChangePricedMessage message = ChangePricedMessage.builder()
-                .message("The cost of the product " + productDto + " has changed, the new price: " + productDto.getCost())
+                .message("The cost of the product: " + productDto.getTitle() + " has changed, the new price: " + productDto.getCost())
+//                .message("The cost of the product ")
                 .build();
         jmsTemplate.convertAndSend(JmsConfig.CHANGE_PRICE_PRODUCT_QUEUE, message);
     }
@@ -76,7 +75,6 @@ public class ProductService {
 //        productDao.findById(productDto.getId()).ifPresent(
 //                (p) -> product.setVersion(p.getVersion()));
 //    }
-
 
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
