@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@Disabled
 class CategoryRestControllerIntegTest {
     @Autowired
     MockMvc mockMvc;

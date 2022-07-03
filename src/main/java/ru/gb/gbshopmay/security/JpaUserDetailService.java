@@ -1,24 +1,22 @@
-package ru.gb.externalapi.security;
+package ru.gb.gbshopmay.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.gb.externalapi.dao.security.AccountRoleDao;
-import ru.gb.externalapi.dao.security.AccountUserDao;
-import ru.gb.externalapi.entity.security.AccountRole;
-import ru.gb.externalapi.entity.security.AccountUser;
-import ru.gb.externalapi.entity.security.enums.AccountStatus;
-import ru.gb.externalapi.exception.UsernameAlreadyExistsException;
-import ru.gb.externalapi.rest.mapper.UserMapper;
-import ru.gb.externalapi.service.UserService;
+import ru.gb.gbapimay.exception.UsernameAlreadyExistsException;
 import ru.gb.gbapimay.security.UserDto;
+import ru.gb.gbshopmay.dao.security.AccountRoleDao;
+import ru.gb.gbshopmay.dao.security.AccountUserDao;
+import ru.gb.gbshopmay.entity.security.AccountRole;
+import ru.gb.gbshopmay.entity.security.AccountUser;
+import ru.gb.gbshopmay.entity.security.enums.AccountStatus;
+import ru.gb.gbshopmay.service.UserService;
+import ru.gb.gbshopmay.web.dto.mapper.UserMapper;
 
 import java.util.List;
 import java.util.Set;
@@ -33,13 +31,6 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
     private final AccountRoleDao accountRoleDao;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-//    private UserService userService;
-
-//    @Autowired
-//    @Lazy
-//    public void setUserService(JpaUserDetailService jpaUserDetailService) {
-//        this.userService = jpaUserDetailService;
-//    }
 
     @Override
     @Transactional
@@ -50,6 +41,8 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
 
     }
 
+    // todo дз 9 поменять, чтобы пользователь был вообще без прав пока не введ код подтверждения из консоли
+    // если нашли как отправлять email-ы то желательно вводить код из email
     @Override
     public UserDto register(UserDto userDto) {
         if (accountUserDao.findByUsername(userDto.getUsername()).isPresent()) {
@@ -58,9 +51,11 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         }
         AccountUser accountUser = userMapper.toAccountUser(userDto);
         AccountRole roleUser = accountRoleDao.findByName("ROLE_USER");
+
         accountUser.setRoles(Set.of(roleUser));
         accountUser.setStatus(AccountStatus.ACTIVE);
         accountUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         AccountUser registeredAccountUser = accountUserDao.save(accountUser);
         log.debug("User with username {} was registered successfully", registeredAccountUser.getUsername());
         return userMapper.toUserDto(registeredAccountUser);
@@ -81,7 +76,6 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         return userMapper.toUserDto(accountUserDao.save(user));
     }
 
-//    @Transactional
     @Override
     public AccountUser findByUsername(String username) {
         return accountUserDao.findByUsername(username).orElseThrow(
@@ -89,10 +83,11 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         );
     }
 
+    //    @Transactional
     public AccountUser update(AccountUser accountUser) {
         if (accountUser.getId() != null) {
             accountUserDao.findById(accountUser.getId()).ifPresent(
-                    (p) -> accountUser.setVersion(p.getVersion())
+                    (user) -> accountUser.setVersion(user.getVersion())
             );
         }
         return accountUserDao.save(accountUser);

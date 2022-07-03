@@ -10,6 +10,16 @@ spring:
       label: ${SPRING_CLOUD_CONFIG_LEVEL:master}
       username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
       password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
+
+  artemis:
+    user: 'admin'
+    password: 'admin'
+
+#logging:
+#  level:
+#    root: DEBUG
+
+
 #  datasource:
 #    url: "jdbc:postgresql://localhost:5432/gb_shop"
 #    username: "geek"

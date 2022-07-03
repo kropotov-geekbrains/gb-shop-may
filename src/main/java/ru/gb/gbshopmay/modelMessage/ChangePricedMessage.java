@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Setter
 public class ChangePricedMessage implements Serializable {
 
-    static final long serialVersionUID = 6076956653392542387L;
+    static final long serialVersionUID = -4099246935652477344L;
 
     private String message;
 

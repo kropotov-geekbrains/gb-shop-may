@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CategoryRestController.class)
+@Disabled
 public class CategoryControllerMockMvcTest {
 
     public static final String SOFT_CATEGORY = "Soft";

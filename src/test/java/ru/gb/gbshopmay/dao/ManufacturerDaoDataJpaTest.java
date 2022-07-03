@@ -1,5 +1,6 @@
 package ru.gb.gbshopmay.dao;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(ShopConfig.class)
+@Disabled
 class ManufacturerDaoDataJpaTest {
 
     public static final String APPLE_COMPANY_NAME = "Apple";
