@@ -14,7 +14,8 @@
 <div th:replace="~{common/navbar :: navi(ProductForm)}"></div>
 
 <div class="container">
-    <form class="row g-3 needs-validation" th:object="${product}" th:action="@{/product}" method="post" enctype="multipart/form-data">
+    <form class="row g-3 needs-validation" th:object="${product}" th:action="@{/product}" method="post"
+          enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}">
         <div class="col-md-8">
             <div class="input-group mb-3">
@@ -48,7 +49,7 @@
         </div>
 
         <div class="col-md-8">
-            <select class="form-select"  th:field="*{categories}" multiple="multiple">
+            <select class="form-select" th:field="*{categories}" multiple="multiple">
                 <option th:each="category : ${categoryService.findAll()}"
                         th:value="${category.id}"
                         th:text="${category.title}"></option>
@@ -67,10 +68,20 @@
             <button class="btn btn-primary" type="submit">Сохранить</button>
         </div>
     </form>
-
+    <hr>
+    <span class="input-group-text" id="images">Добавить несколько изображений</span>
+    <form method="POST" enctype="multipart/form-data" th:action="@{/product/upload-multiple-files}">
+        <input type="hidden" th:field="${product.id}">
+        <input type="file" name="files" multiple> <br/>
+        <div>
+            <img th:src="@{'/product/images/' + ${product.id}}" alt="" width="50px" height="50"/>
+        </div>
+        <br/>
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+    </form>
+</div>
 </div>
 <div th:replace="~{common/footer :: footerBlock}"/>
-
 
 </body>
 </html>

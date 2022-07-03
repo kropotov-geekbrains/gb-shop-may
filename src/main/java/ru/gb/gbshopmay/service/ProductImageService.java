@@ -19,13 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * @author Artem Kropotov
- * created at 26.06.2022
- **/
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -81,7 +78,7 @@ public class ProductImageService {
         } catch (IOException e) {
             throw new StorageException("Error while creating storage");
         }
-        try(InputStream inputStream = file.getInputStream()) {
+        try (InputStream inputStream = file.getInputStream()) {
             Files.copy(inputStream, this.rootLocation.resolve(path).resolve(filename), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new StorageException(String.format("Error while saving file %s", filename));
@@ -93,6 +90,19 @@ public class ProductImageService {
     public BufferedImage loadFileAsImage(Long id) throws IOException {
         String imageName = productImageDao.findImageNameByProductId(id);
         Resource resource = loadAsResource(imageName);
+        return ImageIO.read(resource.getFile());
+    }
+
+    public List<String> uploadMultipleFilesByProductId(Long id) {
+        return productImageDao.findAllImagesByProductId(id);
+    }
+
+    public List<String> uploadMultipleFiles() {
+        return productImageDao.findAllImages();
+    }
+
+    public BufferedImage loadFileAsImageByFilename(String name) throws IOException {
+        Resource resource = loadAsResource(name);
         return ImageIO.read(resource.getFile());
     }
 

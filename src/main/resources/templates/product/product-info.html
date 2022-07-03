@@ -13,13 +13,40 @@
 
 <div th:replace="~{common/navbar :: navi(ProductForm)}"></div>
 
-<div class="container">
+<div class="container" align="center">
+    <h2>Подробная информация</h2>
+    <hr>
     <h2 th:text="${'Название: ' + product.title}"></h2>
     <h2 th:text="${'Цена: ' + product.cost}"></h2>
 
+    <div id="carouselMultiItemExample"
+         class="carousel slide carousel-dark"
+         data-bs-ride="carousel">
+        <div class="d-flex justify-content-center mb-4">
+            <button class="carousel-control-prev position-relative"
+                    type="button"
+                    data-bs-target="#carouselMultiItemExample"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next position-relative"
+                    type="button"
+                    data-bs-target="#carouselMultiItemExample"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div class="carousel-inner py-4">
+            <div th:each="imageName, i : ${productImages}" class="carousel-item"
+                 th:classappend="${i.index==0 ? 'active' : ''}">
+                <img th:src="@{'/product/image/' + ${imageName}}" alt="" class="d-block" width="400" height="400"/>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="~{common/footer :: footerBlock}"/>
-
 
 </body>
 </html>

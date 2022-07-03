@@ -16,6 +16,10 @@ import ru.gb.gbshopmay.service.ProductService;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,6 +44,8 @@ public class ProductController {
         ProductDto productDto;
         if (id != null) {
             productDto = productService.findById(id);
+            List<String> images = new ArrayList<>(productImageService.uploadMultipleFilesByProductId(id));
+            model.addAttribute("productImages", images);
         } else {
             productDto = new ProductDto();
         }
@@ -58,6 +64,8 @@ public class ProductController {
         } else {
             return "redirect:/product/all";
         }
+        List<String> images = new ArrayList<>(productImageService.uploadMultipleFilesByProductId(id));
+        model.addAttribute("productImages", images);
         model.addAttribute("product", productDto);
         return "product/product-info";
     }
@@ -90,4 +98,31 @@ public class ProductController {
     }
 
     //  todo дз 11      Сделать загрузку множества изображений
+
+//    @GetMapping(value = "/upload-multiple-files")
+//    public void uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        Arrays.stream(files)
+//                .map(file -> productImageService.save(file))
+//                .collect(Collectors.toList());
+//    }
+
+    @PostMapping("/upload-multiple-files")
+    public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @RequestParam("id") Long id) {
+        Arrays.stream(files)
+                .map(file -> productService.saveProductImage(id, file))
+                .collect(Collectors.toList());
+        return "redirect:/product?id=" + id;
+    }
+
+    @GetMapping(value = "/image/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
+    public byte[] getImageByName(@PathVariable String name) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(productImageService.loadFileAsImageByFilename(name), "png", byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new byte[]{};
+    }
 }

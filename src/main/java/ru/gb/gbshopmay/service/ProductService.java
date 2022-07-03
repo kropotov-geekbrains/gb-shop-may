@@ -29,7 +29,6 @@ public class ProductService {
     private final CategoryDao categoryDao;
     private final ProductImageService productImageService;
 
-
     public ProductDto save(ProductDto productDto, MultipartFile multipartFile) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
         if (product.getId() != null) {
@@ -48,6 +47,17 @@ public class ProductService {
         }
 //        final ProductDto savedProductDto = ;
 
+        return productMapper.toProductDto(productDao.save(product));
+    }
+
+    public ProductDto saveProductImage(Long productId, MultipartFile multipartFile) {
+        Product product = productDao.getById(productId);
+        String pathToSavedFile = productImageService.save(multipartFile);
+        ProductImage productImage = ProductImage.builder()
+                .path(pathToSavedFile)
+                .product(product)
+                .build();
+        product.addImage(productImage);
         return productMapper.toProductDto(productDao.save(product));
     }
 
