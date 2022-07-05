@@ -8,13 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapimay.product.dto.ProductDto;
-import ru.gb.gbshopmay.service.CategoryService;
-import ru.gb.gbshopmay.service.ManufacturerService;
-import ru.gb.gbshopmay.service.ProductImageService;
-import ru.gb.gbshopmay.service.ProductService;
+import ru.gb.gbapimay.review.dto.ReviewDto;
+import ru.gb.gbshopmay.dao.ReviewDao;
+import ru.gb.gbshopmay.service.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,8 @@ public class ProductController {
     private final ProductImageService productImageService;
     private final CategoryService categoryService;
     private final ManufacturerService manufacturerService;
+    private final UserService userService;
+    private final ReviewService reviewService;
 
 
     @GetMapping("/all")
@@ -124,5 +127,15 @@ public class ProductController {
             e.printStackTrace();
         }
         return new byte[]{};
+    }
+
+    @PostMapping("/review")
+    public String addReview(ReviewDto reviewDto, HttpSession httpSession, Principal principal) {
+        userService.findByUsername(principal.getName());
+
+
+
+        reviewService.save(reviewDto);
+        return "";
     }
 }
