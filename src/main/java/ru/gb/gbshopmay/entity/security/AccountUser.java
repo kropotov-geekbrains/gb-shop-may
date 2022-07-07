@@ -22,7 +22,6 @@ public class AccountUser extends InfoEntity implements UserDetails {
 
     private String username;
     private String password;
-
     private String firstname;
     private String lastname;
     @Column(name = "email")

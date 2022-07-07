@@ -1,6 +1,7 @@
 package ru.gb.gbshopmay.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 class ManufacturerServiceMockitoTest {
 
     public static final String APPLE_COMPANY_NAME = "Apple";

@@ -2,6 +2,7 @@ package ru.gb.gbshopmay.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,8 +13,10 @@ import ru.gb.gbapimay.exception.UsernameAlreadyExistsException;
 import ru.gb.gbapimay.security.UserDto;
 import ru.gb.gbshopmay.dao.security.AccountRoleDao;
 import ru.gb.gbshopmay.dao.security.AccountUserDao;
+import ru.gb.gbshopmay.dao.security.ConfirmationCodeDao;
 import ru.gb.gbshopmay.entity.security.AccountRole;
 import ru.gb.gbshopmay.entity.security.AccountUser;
+import ru.gb.gbshopmay.entity.security.ConfirmationCode;
 import ru.gb.gbshopmay.entity.security.enums.AccountStatus;
 import ru.gb.gbshopmay.service.UserService;
 import ru.gb.gbshopmay.web.dto.mapper.UserMapper;
@@ -31,6 +34,8 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
     private final AccountRoleDao accountRoleDao;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+//    private final ConfirmationCode confirmationCode;
+    private final ConfirmationCodeDao confirmationCodeDao;
 
     @Override
     @Transactional
@@ -41,8 +46,11 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
 
     }
 
-    // todo дз 9 поменять, чтобы пользователь был вообще без прав пока не введ код подтверждения из консоли
-    // если нашли как отправлять email-ы то желательно вводить код из email
+    @Override
+    public String getConfirmationCode() {
+        String confirmationCode;
+        return confirmationCode = RandomStringUtils.randomAscii(8);
+    }
     @Override
     public UserDto register(UserDto userDto) {
         if (accountUserDao.findByUsername(userDto.getUsername()).isPresent()) {
@@ -82,8 +90,6 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
                 () -> new UsernameNotFoundException("Username: " + username + " not found")
         );
     }
-
-    //    @Transactional
     public AccountUser update(AccountUser accountUser) {
         if (accountUser.getId() != null) {
             accountUserDao.findById(accountUser.getId()).ifPresent(
@@ -91,6 +97,14 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
             );
         }
         return accountUserDao.save(accountUser);
+    }
+    @Override
+    public void generateConfirmationCode(UserDto thisUser, String code) {
+        ConfirmationCode confirmationCode = ConfirmationCode.builder().
+                code(code)
+                .accountUser(userMapper.toAccountUser(thisUser))
+                .build();
+        confirmationCodeDao.save(confirmationCode);
     }
 
 

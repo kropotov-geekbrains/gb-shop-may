@@ -10,10 +10,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.gb.gbapimay.security.UserDto;
+import ru.gb.gbshopmay.dao.security.AccountUserDao;
+import ru.gb.gbshopmay.dao.security.ConfirmationCodeDao;
+import ru.gb.gbshopmay.entity.security.AccountUser;
+import ru.gb.gbshopmay.entity.security.ConfirmationCode;
 import ru.gb.gbshopmay.service.UserService;
+import ru.gb.gbshopmay.web.dto.mapper.UserMapper;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * @author Artem Kropotov
@@ -26,6 +33,8 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final UserService userService;
+    private final ConfirmationCodeDao confirmationCodeDao;
+    private static UserDto thisUser;
 
     @GetMapping("/login")
     public String loginPage() {
@@ -52,10 +61,36 @@ public class AuthController {
             model.addAttribute("registrationError", "Username already exists");
             return "auth/registration-form";
         } catch (UsernameNotFoundException ignored) {}
-        userService.register(userDto);
+        thisUser = userService.register(userDto);
+//        UserDto thisUser = userService.register(userDto);
         model.addAttribute("username", username);
+        String confirmationCode = userService.getConfirmationCode();
+        System.out.println("Confirmation code! " + confirmationCode);
+        userService.generateConfirmationCode(thisUser, confirmationCode);
+        model.addAttribute("id", thisUser.getId());
+        System.out.println(thisUser.getId());// todo
         return "auth/registration-confirmation";
     }
 
-    // todo дз 9 добавить метод обработки кода подтверждения
+    @PostMapping("/confirmation")
+    public String handleConfirmationForm (String code, Model model) {
+        model.addAttribute("code", code);
+        System.out.println("code: " + code);
+        ConfirmationCode confirmationCodeBy_id = confirmationCodeDao.findConfirmationCodeByAccountUser_Id(thisUser.getId());
+        System.out.println(confirmationCodeBy_id.getCode() + " + from model: " + code);
+        System.out.println("from model: " + code);
+        if (confirmationCodeBy_id.equals(code)) {
+            System.out.println(confirmationCodeBy_id.equals(code));
+            AccountUser accountUser = confirmationCodeBy_id.getAccountUser();
+            accountUser.setEnabled(true);
+            accountUser.setAccountNonLocked(true);
+            accountUser.setCredentialsNonExpired(true);
+            accountUser.setAccountNonExpired(true);
+            userService.update(accountUser);
+            return "redirect:/auth/login";
+        }
+        System.out.println(!code.equals(confirmationCodeBy_id.toString()));
+        return "auth/registration-confirmation";
+    }
+
 }

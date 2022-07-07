@@ -44,6 +44,10 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+
     implementation 'org.mapstruct:mapstruct:1.5.1.Final'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'

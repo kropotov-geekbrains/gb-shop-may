@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests(
                 (requests) -> {
                     requests.antMatchers("/").permitAll();
-                    requests.antMatchers("/product/all").permitAll();
+                    requests.antMatchers("//api/v1/product").permitAll();
                     requests.antMatchers(HttpMethod.GET, "/product").hasRole("ADMIN");
                     requests.antMatchers(HttpMethod.POST, "/product").hasRole("ADMIN");
                     requests.mvcMatchers(HttpMethod.GET, "/product/{productId}").permitAll();
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customAuthenticationSuccessHandler)
                 .permitAll();
         http.logout()
-                .logoutSuccessUrl("/product/all")
+                .logoutSuccessUrl("/api/v1/product")
                 .permitAll();
         http.httpBasic();
     }

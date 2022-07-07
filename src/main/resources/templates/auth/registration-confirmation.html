@@ -12,20 +12,27 @@
             crossorigin="anonymous"></script>
 </head>
 
-
-<!-- todo дз 9 добавить форму ввода кода подтверждения-->
 <body>
 <div th:replace="~{common/navbar :: navi(Confirmation)}"/>
 <div class="container">
-    <h2 th:text="'Пользователь ' + ${username} +  ' успешно  зарегестирован!'"></h2>
-    <hr>
-    <h2 th:text="'Введите код подтверждения из консоли!'"></h2>
 
-<!--    <div class="error" th:if="${#fields.hasErrors('confirmation')}" th:errors="*{confirmation}"/>-->
-<!--    <div style="margin-bottom: 25px" class="input-group">-->
-<!--        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>-->
-<!--        <input type="password" th:field="*{password}" placeholder="confirmation code(*)" class="form-control"/>-->
-<!--    </div>-->
+    <div id="loginbox" style="margin-top: 50px;"
+         class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+        <form th:action="@{/auth/confirmation}"
+              th:object="${confirmationCode}" method="post" class="form-horizontal">
+    <h2 th:text="'Пользователь ' + ${username} + ' с id: ' +  ${id} + ' успешно  зарегестирован!'"></h2>
+    <hr>
+    <h4 th:text="'Введите код подтверждения из консоли!'"></h4>
+
+            <div style="margin-bottom: 25px" class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="text" name="code" placeholder="confirmation code(*)" class="form-control">
+            </div>
+
+        <div style="margin-top: 10px" class="form-group">
+            <div class="col-sm-6 controls">
+                <button type="submit" class="btn btn-primary">Confirmation Code</button>
+    </div>
     <p>Для входа перейдите по <a th:href="@{/auth/login}">ссылке</a></p>
 </div>
 <div th:replace="~{common/footer :: footerBlock}"/>
