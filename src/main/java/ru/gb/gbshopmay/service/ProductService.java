@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.gbapimay.category.dto.CategoryDto;
+import ru.gb.gbapimay.common.enums.Status;
 import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbshopmay.config.JmsConfig;
 import ru.gb.gbshopmay.dao.CategoryDao;
@@ -17,7 +18,6 @@ import ru.gb.gbshopmay.dao.ProductDao;
 import ru.gb.gbshopmay.entity.Category;
 import ru.gb.gbshopmay.entity.Manufacturer;
 import ru.gb.gbshopmay.entity.Product;
-import ru.gb.gbshopmay.entity.enums.Status;
 import ru.gb.gbshopmay.modelMessage.ChangePricedMessage;
 import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
@@ -80,6 +80,11 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
         return productMapper.toProductDto(productDao.findById(id).orElse(null));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Product> findProductById(Long id) {
+        return productDao.findById(id);
     }
 
     public List<ProductDto> findAll() {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Список продуктов</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<div th:replace="~{common/navbar :: navi(Cart)}"></div>
+
+<div class="container">
+    <span th:if="${cart.items.size() == 0}">Корзина пуста</span>
+    <div th:unless="${cart.items.size() == 0}">
+        <!--        <span th:text="${cart.items.size()"></span>-->
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Наименование</th>
+                <th scope="col">Цена за ед.</th>
+                <th scope="col">Кол-во</th>
+                <th scope="col">Сумма</th>
+                <th scope="col">Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cartItem, i : ${cart.items}">
+
+                <td th:text="${i.count}"></td>
+                <td th:text="${cartItem.product.title}"></td>
+                <td th:text="${cartItem.itemPrice}"></td>
+                <td th:text="${cartItem.quantity}"></td>
+                <td th:text="${cartItem.totalPrice}"></td>
+                <td>
+<!--                    <a type="button" th:href="@{${'/cart/delete/' + product.id}}" class="btn btn-danger">Удалить</a>-->
+                    <a type="button" class="btn btn-danger">Удалить</a>
+                    <!--                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>-->
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <a type="button" class="btn btn-primary" th:href="@{/order/fill}">Продолжить оформление заказа</a>
+    </div>
+
+</div>
+<div th:replace="~{common/footer :: footerBlock}"/>
+
+
+</body>
+</html>

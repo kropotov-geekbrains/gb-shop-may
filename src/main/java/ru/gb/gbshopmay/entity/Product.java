@@ -1,20 +1,15 @@
 package ru.gb.gbshopmay.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.gb.gbapimay.common.enums.Status;
 import ru.gb.gbshopmay.entity.common.InfoEntity;
-import ru.gb.gbshopmay.entity.enums.Status;
 
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Setter

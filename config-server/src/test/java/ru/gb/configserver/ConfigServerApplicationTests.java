@@ -1,14 +1,12 @@
-package ru.gb.configserver;
-
-import org.testng.annotations.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class ConfigServerApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+//package ru.gb.configserver;
+//import org.springframework.boot.test.context.SpringBootTest;
+//
+//@SpringBootTest
+//class ConfigServerApplicationTests {
+//
+//    @Test
+//    void contextLoads() {
+//    }
+//
+//}
 

@@ -12,7 +12,7 @@
 <body>
 
 
-<div th:replace="~{navbar :: navi(ProductList)}"></div>
+<div th:replace="~{common/navbar :: navi(ProductList)}"></div>
 
 <div class="container">
     <span th:if="${products.size() == 0}">Товаров нет</span>
@@ -49,18 +49,22 @@
                     <a type="button"
                        th:href="@{${'/product/delete/' + product.id}}" class="btn btn-danger">Удалить</a>
                 </td>
-                <td sec:authorize="hasAuthority('product.read') || isAnonymous()">
-                    <a type="button"
-                       th:href="@{${'/cart/add/' + product.id}}" class="btn btn-danger">+</a>
-                    <!--                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>-->
+                <td>
+                    <a type="button" sec:authorize="hasAuthority('product.read')" th:href="@{${'/cart/add/' + product.id}}" class="btn btn-success">Добавить в корзину</a>
+                    <!--                    <a type="button" sec:authorize="isAnonymous()" th:href="@{/product/authorizePage}" class="btn btn-success">Добавить в корзину</a>-->
                 </td>
+<!--                <td sec:authorize="hasAuthority('product.read') || isAnonymous()">-->
+<!--                    <a type="button"-->
+<!--                       th:href="@{${'/cart/add/' + product.id}}" class="btn btn-danger">+</a>-->
+<!--                    &lt;!&ndash;                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>&ndash;&gt;-->
+<!--                </td>-->
             </tr>
             </tbody>
         </table>
     </div>
 
 </div>
-<div th:replace="~{footer :: footerBlock}"/>
+<div th:replace="~{common/footer :: footerBlock}"/>
 
 
 </body>

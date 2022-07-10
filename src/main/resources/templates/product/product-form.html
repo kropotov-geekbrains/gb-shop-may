@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div th:replace="~{navbar :: navi(ProductForm)}"></div>
+<div th:replace="~{common/navbar :: navi(ProductForm)}"></div>
 
 <div class="container">
     <form class="row g-3 needs-validation" th:object="${product}" th:action="@{/product}" method="post">
@@ -43,7 +43,7 @@
     </form>
 
 </div>
-<div th:replace="~{footer :: footerBlock}"/>
+<div th:replace="~{common/footer :: footerBlock}"/>
 
 
 </body>

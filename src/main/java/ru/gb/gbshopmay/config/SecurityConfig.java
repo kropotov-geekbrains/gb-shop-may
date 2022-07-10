@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customAuthenticationSuccessHandler)
                 .permitAll();
         http.logout()
-                .logoutSuccessUrl("/api/v1/product")
+                .logoutSuccessUrl("/product/all")
                 .permitAll();
         http.httpBasic();
     }

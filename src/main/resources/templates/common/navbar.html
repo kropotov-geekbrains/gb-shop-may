@@ -26,6 +26,10 @@
         <li sec:authorize="hasAuthority('product.create')" class="nav-item">
           <a class="nav-link" th:classappend="${activeTab == 'ProductForm' ? 'active' : ''}" th:href="@{/product}">Добавить продукт</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" th:classappend="${activeTab == 'Cart' ? 'active' : ''}" th:href="@{/cart}"
+             th:text="'Корзина(' + ${session.cart == null ? '0)' : session.cart.totalQuantity + ')'}"></a>
+        </li>
         <li sec:authorize="isAuthenticated()" class="nav-item">
           <form th:action="@{/logout}" method="post">
             <input type="submit" class="btn btn-danger" value="Выйти"/>
