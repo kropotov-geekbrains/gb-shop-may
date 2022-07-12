@@ -3,7 +3,6 @@
 //
 //@SpringBootTest
 //class ConfigServerApplicationTests {
-//
 //    @Test
 //    void contextLoads() {
 //    }

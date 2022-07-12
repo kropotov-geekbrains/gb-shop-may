@@ -1,6 +1,7 @@
 package ru.gb.gbshopmay.web.model;
 
 import lombok.Data;
+import ru.gb.gbshopmay.dao.OrderItemDao;
 import ru.gb.gbshopmay.entity.OrderItem;
 import ru.gb.gbshopmay.entity.Product;
 
@@ -51,7 +52,6 @@ public class Cart {
     private void recalculate() {
         totalPrice = BigDecimal.ZERO;
         totalQuantity = 0;
-
         for (OrderItem item : items) {
             item.setTotalPrice(item.getProduct().getCost().multiply(new BigDecimal(item.getQuantity())));
             totalPrice = totalPrice.add(item.getTotalPrice());

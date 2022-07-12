@@ -2,10 +2,12 @@ package ru.gb.gbshopmay.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gb.gbshopmay.dao.OrderItemDao;
+import ru.gb.gbshopmay.entity.OrderItem;
 import ru.gb.gbshopmay.web.model.Cart;
-
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Artem Kropotov
@@ -16,6 +18,7 @@ import java.math.BigDecimal;
 public class CartService {
 
     public static final String CART_ATTRIBUTE ="cart";
+    private final OrderItemDao orderItemDao;
 
     private final ProductService productService;
 
@@ -33,6 +36,27 @@ public class CartService {
                 .ifPresent((p) -> getCurrentCart(session).add(p));
     }
 
+//    public void saveOrderItem(HttpSession session, Long id) {
+//        Cart currentCart = getCurrentCart(session);
+//        List<OrderItem> items = currentCart.getItems();
+//        for (OrderItem item : items) {
+//            if (item.getProduct().getId() == id){
+//                item.setQuantity((short)(item.getQuantity() + 1));
+//                item.setTotalPrice(item.getProduct().getCost().multiply(new BigDecimal(item.getQuantity())));
+//            }
+//        }
+//        OrderItem orderItem = items.get(0);
+//        OrderItem orderItemFromDb  = OrderItem.builder().
+//                quantity(orderItem.getQuantity())
+//                .itemPrice(orderItem.getItemPrice())
+//                .totalPrice(orderItem.getTotalPrice())
+//                .product(orderItem.getProduct())
+//                .order(null)
+//                .build();
+//        orderItemDao.save(orderItem);
+//    }
+
+
     public void removeFromCart(HttpSession session, Long productId) {
         productService.findProductById(productId)
                 .ifPresent((p) -> getCurrentCart(session).remove(p));
@@ -45,4 +69,6 @@ public class CartService {
     public void resetCart(HttpSession session) {
         session.removeAttribute(CART_ATTRIBUTE);
     }
+
+
 }

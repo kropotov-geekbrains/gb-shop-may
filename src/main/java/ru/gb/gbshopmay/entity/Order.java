@@ -49,13 +49,13 @@ public class Order extends InfoEntity {
     @Column(name = "delivery_price")
     private BigDecimal deliveryPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_address_id")
-    private Address deliveryAddress;
-
-    @ManyToOne
-    @JoinColumn(name = "shop_address_id")
-    private Address shopAddress;
+//    @ManyToOne
+//    @JoinColumn(name = "delivery_address_id")
+//    private Address deliveryAddress;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "shop_address_id")
+//    private Address shopAddress;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -67,11 +67,29 @@ public class Order extends InfoEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
+//    @Builder
+//    public Order(Long id, int version, String createdBy, LocalDateTime createdDate, String lastModifiedBy,
+//                 LocalDateTime lastModifiedDate, String recipientFirstname, String recipientLastname, String recipientPhone,
+//                 String recipientMail, OrderStatus status, LocalDate deliveryDate, BigDecimal deliveryPrice,
+//                 Address deliveryAddress, Address shopAddress, AccountUser accountUser, List<OrderItem> orderItems) {
+//        super(id, version, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
+//        this.recipientFirstname = recipientFirstname;
+//        this.recipientLastname = recipientLastname;
+//        this.recipientPhone = recipientPhone;
+//        this.recipientMail = recipientMail;
+//        this.status = status;
+//        this.deliveryDate = deliveryDate;
+//        this.deliveryPrice = deliveryPrice;
+//        this.deliveryAddress = deliveryAddress;
+//        this.shopAddress = shopAddress;
+//        this.accountUser = accountUser;
+//        this.orderItems = orderItems;
+//    }
     @Builder
     public Order(Long id, int version, String createdBy, LocalDateTime createdDate, String lastModifiedBy,
                  LocalDateTime lastModifiedDate, String recipientFirstname, String recipientLastname, String recipientPhone,
                  String recipientMail, OrderStatus status, LocalDate deliveryDate, BigDecimal deliveryPrice,
-                 Address deliveryAddress, Address shopAddress, AccountUser accountUser, List<OrderItem> orderItems) {
+                 AccountUser accountUser, List<OrderItem> orderItems) {
         super(id, version, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
         this.recipientFirstname = recipientFirstname;
         this.recipientLastname = recipientLastname;
@@ -80,8 +98,8 @@ public class Order extends InfoEntity {
         this.status = status;
         this.deliveryDate = deliveryDate;
         this.deliveryPrice = deliveryPrice;
-        this.deliveryAddress = deliveryAddress;
-        this.shopAddress = shopAddress;
+//        this.deliveryAddress = deliveryAddress;
+//        this.shopAddress = shopAddress;
         this.accountUser = accountUser;
         this.orderItems = orderItems;
     }

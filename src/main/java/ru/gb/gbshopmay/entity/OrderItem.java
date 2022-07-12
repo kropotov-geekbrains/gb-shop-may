@@ -1,9 +1,6 @@
 package ru.gb.gbshopmay.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.gb.gbshopmay.entity.common.BaseEntity;
 
 import javax.persistence.*;
