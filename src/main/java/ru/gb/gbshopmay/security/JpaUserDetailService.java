@@ -20,7 +20,6 @@ import ru.gb.gbshopmay.entity.security.ConfirmationCode;
 import ru.gb.gbshopmay.entity.security.enums.AccountStatus;
 import ru.gb.gbshopmay.service.UserService;
 import ru.gb.gbshopmay.web.dto.mapper.UserMapper;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

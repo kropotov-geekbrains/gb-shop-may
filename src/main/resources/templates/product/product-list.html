@@ -21,7 +21,7 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Наименование</th>
+                <th colspan="2" scope="col">Наименование</th>
                 <th scope="col">Цена</th>
                 <th scope="col" sec:authorize="hasAuthority('product.update')">Редактировать</th>
                 <th scope="col" sec:authorize="hasAuthority('product.delete')">Удалить</th>
@@ -35,6 +35,11 @@
                 th:attr="prod_index=${product.id}">
 
                 <th scope="row" th:text="${i.count}"></th>
+                <td>
+                    <div>
+                        <img th:src="@{'/product/images/' + ${product.id}}" alt="" width="50px" height="50" />
+                    </div>
+                </td>
                 <td th:text="${product.title}"></td>
                 <td th:text="${product.cost}"></td>
                 <td sec:authorize="hasAuthority('product.update')">

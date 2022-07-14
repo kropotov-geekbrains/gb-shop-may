@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.gbapimay.product.dto.ProductDto;
+import ru.gb.gbshopmay.service.ProductImageService;
 import ru.gb.gbshopmay.service.ProductService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -37,9 +39,9 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto, MultipartFile multipartFile) {
         if (productService.presenceCheckManufacturer(productDto.getManufacturer()) && productService.presenceCheckCategory(productDto.getCategories())){
-            ProductDto savedProductDto = productService.save(productDto);
+            ProductDto savedProductDto = productService.save(productDto, multipartFile);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProductDto.getId()));
             return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
@@ -55,9 +57,9 @@ public class ProductRestController {
 //    }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<?> handleUpdate(@PathVariable("productId") Long id, @Validated @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> handleUpdate(@PathVariable("productId") Long id, @Validated @RequestBody ProductDto productDto,MultipartFile multipartFile) {
         productDto.setId(id);
-        ProductDto savedProductDto = productService.save(productDto);
+        ProductDto savedProductDto = productService.save(productDto, multipartFile);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProductDto.getId()));
         return new ResponseEntity<>(httpHeaders, HttpStatus.NO_CONTENT);

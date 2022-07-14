@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -35,6 +37,7 @@ public class Product extends InfoEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
@@ -44,6 +47,17 @@ public class Product extends InfoEntity {
 //    joinColumns = @JoinColumn(name = "product_id"),
 //    inverseJoinColumns = @JoinColumn(name = "cart_id"))
 //    private Set<Cart> carts;
+
+    //    @Singular
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "product")
+    private List<ProductImage> images;
+
+    public void addImage(ProductImage productImage) {
+        if (images == null) {
+            images = new ArrayList<>();
+        }
+        images.add(productImage);
+    }
 
     @Override
     public String toString() {
@@ -58,7 +72,7 @@ public class Product extends InfoEntity {
     @Builder
     public Product(Long id, int version, String createdBy, LocalDateTime createdDate, String lastModifiedBy,
                    LocalDateTime lastModifiedDate, String title, BigDecimal cost, LocalDate manufactureDate,
-                   Manufacturer manufacturer, Status status, Set<Category> categories) {
+                   Manufacturer manufacturer, Status status, Set<Category> categories, List<ProductImage> images) {
         super(id, version, createdBy, createdDate, lastModifiedBy, lastModifiedDate);
         this.title = title;
         this.cost = cost;
@@ -66,5 +80,6 @@ public class Product extends InfoEntity {
         this.manufacturer = manufacturer;
         this.status = status;
         this.categories = categories;
+        this.images = images;
     }
 }

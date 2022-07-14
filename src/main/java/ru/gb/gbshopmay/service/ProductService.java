@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.common.enums.Status;
 import ru.gb.gbapimay.product.dto.ProductDto;
@@ -18,6 +19,7 @@ import ru.gb.gbshopmay.dao.ProductDao;
 import ru.gb.gbshopmay.entity.Category;
 import ru.gb.gbshopmay.entity.Manufacturer;
 import ru.gb.gbshopmay.entity.Product;
+import ru.gb.gbshopmay.entity.ProductImage;
 import ru.gb.gbshopmay.modelMessage.ChangePricedMessage;
 import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
@@ -36,6 +38,7 @@ public class ProductService {
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
     private final JmsTemplate jmsTemplate;
+    private final ProductImageService productImageService;
 
 
 //    public ProductDto save(ProductDto productDto) {
@@ -47,21 +50,45 @@ public class ProductService {
 //        }
 //        return productMapper.toProductDto(productDao.save(product));
 //    }
-    public ProductDto save(ProductDto productDto) {
+    public ProductDto save(ProductDto productDto, MultipartFile multipartFile) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
-        Product productDB = productDao.getById(productDto.getId());
         if (product.getId() != null) {
-            if (productDto.getCost().equals(productDB.getCost())){
-                productDao.findById(productDto.getId()).ifPresent(
-                        (p) -> product.setVersion(p.getVersion()));
-            } else {
-                sendMessage(productDto);
-                productDao.findById(productDto.getId()).ifPresent(
-                        (p) -> product.setVersion(p.getVersion()));
-            }
+            productDao.findById(productDto.getId()).ifPresent(
+                    (p) -> product.setVersion(p.getVersion())
+            );
         }
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String pathToSavedFile = productImageService.save(multipartFile);
+            ProductImage productImage = ProductImage.builder()
+                    .path(pathToSavedFile)
+                    .product(product)
+                    .build();
+            product.addImage(productImage);
+        }
+//        final ProductDto savedProductDto = ;
+
         return productMapper.toProductDto(productDao.save(product));
+//        Product productDB = productDao.getById(productDto.getId());
+//        if (product.getId() != null) {
+//            if (productDto.getCost().equals(productDB.getCost())){
+//                productDao.findById(productDto.getId()).ifPresent(
+//                        (p) -> product.setVersion(p.getVersion()));
+//            } else {
+//                sendMessage(productDto);
+//                productDao.findById(productDto.getId()).ifPresent(
+//                        (p) -> product.setVersion(p.getVersion()));
+//            }
+//        }
+//        return productMapper.toProductDto(productDao.save(product));
     }
+
+    @Transactional
+    public ProductDto save(final ProductDto productDto) {
+        return save(productDto, null);
+    }
+
+
 
 //    @Scheduled(fixedRate = 1000)
     public void sendMessage(ProductDto productDto) {
