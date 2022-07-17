@@ -35,6 +35,18 @@ public class CategoryService {
         return categoryMapper.toCategoryDto(categoryDao.findById(id).orElse(null));
     }
 
+    @Transactional(readOnly = true)
+    public CategoryDto findByTitle(String title) {
+        System.out.println(title + " " + categoryDao.findByTitle(title));
+        return categoryMapper.toCategoryDto(categoryDao.findByTitle(title).orElse(null));
+    }
+
+    public String findCategoryTitleByProductId (Long id){
+       return categoryDao.findCategoryTitleByProductId(id);
+    }
+
+
+
     public List<CategoryDto> findAll() {
         return categoryDao.findAll().stream()
                 .map(categoryMapper::toCategoryDto)

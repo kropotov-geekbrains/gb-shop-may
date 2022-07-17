@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.common.enums.Status;
@@ -23,10 +24,7 @@ import ru.gb.gbshopmay.entity.ProductImage;
 import ru.gb.gbshopmay.modelMessage.ChangePricedMessage;
 import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,24 +38,21 @@ public class ProductService {
     private final JmsTemplate jmsTemplate;
     private final ProductImageService productImageService;
 
+    public List<String> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) { //todo my for save
+        return  Arrays.stream(files)
+                .map(file -> productImageService.save(file))
+                .collect(Collectors.toList());
+    }
 
-//    public ProductDto save(ProductDto productDto) {
-//        Product product = productMapper.toProduct(productDto, manufacturerDao);
-//        if (product.getId() != null) {
-//            productDao.findById(productDto.getId()).ifPresent(
-//                    (p) -> product.setVersion(p.getVersion())
-//            );
-//        }
-//        return productMapper.toProductDto(productDao.save(product));
-//    }
     public ProductDto save(ProductDto productDto, MultipartFile multipartFile) {
         Product product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
+//        Product productFromDB = productDao.getById(productDto.getId()); // todo при создании нового продукта id=null
+//        if (productFromDB != null && !productDto.getCost().equals(productFromDB.getCost())) sendMessage(productDto);
         if (product.getId() != null) {
             productDao.findById(productDto.getId()).ifPresent(
                     (p) -> product.setVersion(p.getVersion())
             );
         }
-
         if (multipartFile != null && !multipartFile.isEmpty()) {
             String pathToSavedFile = productImageService.save(multipartFile);
             ProductImage productImage = ProductImage.builder()
@@ -66,28 +61,16 @@ public class ProductService {
                     .build();
             product.addImage(productImage);
         }
-//        final ProductDto savedProductDto = ;
 
         return productMapper.toProductDto(productDao.save(product));
-//        Product productDB = productDao.getById(productDto.getId());
-//        if (product.getId() != null) {
-//            if (productDto.getCost().equals(productDB.getCost())){
-//                productDao.findById(productDto.getId()).ifPresent(
-//                        (p) -> product.setVersion(p.getVersion()));
-//            } else {
-//                sendMessage(productDto);
-//                productDao.findById(productDto.getId()).ifPresent(
-//                        (p) -> product.setVersion(p.getVersion()));
-//            }
-//        }
-//        return productMapper.toProductDto(productDao.save(product));
     }
+
+
 
     @Transactional
     public ProductDto save(final ProductDto productDto) {
         return save(productDto, null);
     }
-
 
 
 //    @Scheduled(fixedRate = 1000)

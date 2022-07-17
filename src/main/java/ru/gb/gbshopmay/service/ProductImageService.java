@@ -7,10 +7,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import ru.gb.gbapimay.product.dto.ProductDto;
+import ru.gb.gbshopmay.dao.ProductDao;
 import ru.gb.gbshopmay.dao.ProductImageDao;
+import ru.gb.gbshopmay.entity.Product;
+import ru.gb.gbshopmay.entity.ProductImage;
 import ru.gb.gbshopmay.exception.StorageException;
 import ru.gb.gbshopmay.exception.StorageFileNotFoundException;
+import ru.gb.gbshopmay.web.dto.mapper.ProductMapper;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -19,8 +25,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Artem Kropotov
@@ -40,6 +49,9 @@ public class ProductImageService {
     private String storagePath;
 
     private final ProductImageDao productImageDao;
+    private final ProductDao productDao;
+    private final ProductMapper productMapper;
+
 
     private Path rootLocation;
 
@@ -90,11 +102,42 @@ public class ProductImageService {
         return filename;
     }
 
+    public ProductDto saveProductImage(Long productId, MultipartFile multipartFile) {
+        Product product = productDao.getById(productId);
+        String pathToSavedFile = save(multipartFile);
+        ProductImage productImage = ProductImage.builder()
+                .path(pathToSavedFile)
+                .product(product)
+                .build();
+        product.addImage(productImage);
+        return productMapper.toProductDto(productDao.save(product));
+    }
+
+
     public BufferedImage loadFileAsImage(Long id) throws IOException {
-        String imageName = productImageDao.findImageNameByProductId(id);
+        String imageName = uploadMultipleFilesByProductId(id);
         Resource resource = loadAsResource(imageName);
         return ImageIO.read(resource.getFile());
     }
+
+    public BufferedImage loadFileAsImageByIdImage(Long id) throws IOException {
+        String imageName = uploadMultipleFilesByImageId(id);
+        Resource resource = loadAsResource(imageName);
+        return ImageIO.read(resource.getFile());
+    }
+
+    public String uploadMultipleFilesByProductId(Long id) {
+        return productImageDao.findImageNameByProductId(id);
+    }
+
+    public String uploadMultipleFilesByImageId(Long id) {
+        return productImageDao.findImageNameByImageId(id);
+    }
+
+    public List<Long> uploadMultipleFiles(Long id) {
+        return productImageDao.findAllIdImagesByProductId(id);
+    }
+
 
     public Resource loadAsResource(String filename) {
 
@@ -114,4 +157,6 @@ public class ProductImageService {
             throw new StorageFileNotFoundException(String.format("Filename cannot be empty: %s", filename));
         }
     }
+
+
 }

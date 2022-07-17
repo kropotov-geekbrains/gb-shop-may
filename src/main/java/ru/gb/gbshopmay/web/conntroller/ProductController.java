@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapimay.product.dto.ProductDto;
+import ru.gb.gbshopmay.dao.ProductDao;
+import ru.gb.gbshopmay.dao.ProductImageDao;
 import ru.gb.gbshopmay.service.CategoryService;
 import ru.gb.gbshopmay.service.ManufacturerService;
 import ru.gb.gbshopmay.service.ProductImageService;
@@ -16,6 +18,10 @@ import ru.gb.gbshopmay.service.ProductService;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +32,8 @@ public class ProductController {
     private final ManufacturerService manufacturerService;
     private final CategoryService categoryService;
     private final ProductImageService productImageService;
+    private final ProductDao productDao;
+    private final ProductImageDao productImageDao;
 
 
     @GetMapping("/all")
@@ -40,6 +48,8 @@ public class ProductController {
         ProductDto productDto;
         if (id != null) {
             productDto = productService.findById(id);
+//            List<String> images = new ArrayList<>(productImageService.uploadMultipleFilesByProductId(id));
+//            model.addAttribute("productImages", images);
         } else {
             productDto = new ProductDto();
         }
@@ -58,7 +68,10 @@ public class ProductController {
         } else {
             return "redirect:/product/all";
         }
+        List<Long> imagesId = new ArrayList<>(productImageService.uploadMultipleFiles(id));
+        model.addAttribute("productImagesId", imagesId);
         model.addAttribute("product", productDto);
+        model.addAttribute("categoryService", categoryService);
         return "product/product-info";
     }
 
@@ -67,12 +80,15 @@ public class ProductController {
 //    public String saveProduct(ProductDto productDto) {
 //        productDto.setManufactureDate(LocalDate.now()); // todo
 //        productService.save(productDto);
-    public String saveProduct(ProductDto product, @RequestParam("file") MultipartFile file) {
-        product.setManufactureDate(LocalDate.now()); // todo
+    public String saveProduct(ProductDto product, @RequestParam("file") MultipartFile file, @RequestParam("files") MultipartFile[] files) {
+        product.setManufactureDate(LocalDate.now());
+
+        // todo
         productService.save(product, file);
+//        productDao.findByTitle(product.getTitle()).get().getId();
+        uploadMultipleFiles(files, productDao.findByTitle(product.getTitle()).get().getId());
         return "redirect:/product/all";
     }
-
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('product.delete')")
@@ -80,7 +96,7 @@ public class ProductController {
         productService.deleteById(id);
         return "redirect:/product/all";
     }
-    @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public byte[] getImage(@PathVariable Long id) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -92,6 +108,24 @@ public class ProductController {
         return new byte[]{};
     }
 
-    //  todo дз 11      Сделать загрузку множества изображений
+
+     @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
+    public byte[] getAllImage(@PathVariable Long id) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            ImageIO.write(productImageService.loadFileAsImageByIdImage(id), "png", byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new byte[]{};
+    }
+
+    public void uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, Long id) {
+        Arrays.stream(files)
+                .map(file -> productImageService.saveProductImage(id, file))
+                .collect(Collectors.toList());
+    }
+
 
 }

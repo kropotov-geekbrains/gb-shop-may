@@ -14,12 +14,84 @@
 <div th:replace="~{common/navbar :: navi(ProductForm)}"></div>
 
 <div class="container">
+
   <h2 th:text="${'Название: ' + product.title}"></h2>
   <h2 th:text="${'Цена: ' + product.cost}"></h2>
+  <h2 th:text="${'Производитель: ' + product.getManufacturer}"></h2>
+  <h2 th:text="${'Категория: ' + categoryService.findCategoryTitleByProductId(productId)}"></h2>
+
 
 </div>
+<div class="row">
+  <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+    <img
+            th:src="@{'/product/image/' + ${productId}}"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Boat on Calm Water"
+    />
+
+    <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain1.webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Wintry Mountain Landscape"
+    />
+  </div>
+
+  <div class="col-lg-4 mb-4 mb-lg-0">
+
+    <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain2.webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Mountains in the Clouds"
+    />
+
+    <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Boat on Calm Water"
+    />
+    </div>
+
+  <div class="col-lg-4 mb-4 mb-lg-0">
+    <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(18).webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Waves at Sea"
+    />
+
+    <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Vertical/mountain3.webp"
+            class="w-100 shadow-1-strong rounded mb-4"
+            alt="Yosemite National Park"
+    />
+  </div>
+</div>
+<div id="carouselMultiItemExample"
+     class="carousel slide carousel-dark"
+     data-bs-ride="carousel">
+  <div class="d-flex justify-content-center mb-4">
+    <button class="carousel-control-prev position-relative"
+            type="button"
+            data-bs-target="#carouselMultiItemExample"
+            data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next position-relative"
+            type="button"
+            data-bs-target="#carouselMultiItemExample"
+            data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="carousel-inner py-4">
+    <div th:each="imageId, i : ${productImagesId}" class="carousel-item"
+         th:classappend="${i.index==0 ? 'active' : ''}">
+      <img th:src="@{'/product/images/' + ${imageId}}" alt="" class="d-block w-100"/>
+    </div>
+  </div>
+</div>
 <div th:replace="~{common/footer :: footerBlock}"/>
-
-
 </body>
 </html>
