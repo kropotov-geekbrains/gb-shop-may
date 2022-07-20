@@ -1,4 +1,4 @@
-package ru.gb.gbshopmay.web.conntroller;
+package ru.gb.gbshopmay.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -86,7 +86,11 @@ public class ProductController {
         // todo
         productService.save(product, file);
 //        productDao.findByTitle(product.getTitle()).get().getId();
-        uploadMultipleFiles(files, productDao.findByTitle(product.getTitle()).get().getId());
+        if (files.length == 0){
+            System.out.println(files);
+            uploadMultipleFiles(files, productDao.findByTitle(product.getTitle()).get().getId());
+        }
+
         return "redirect:/product/all";
     }
 
@@ -108,7 +112,6 @@ public class ProductController {
         return new byte[]{};
     }
 
-
      @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public byte[] getAllImage(@PathVariable Long id) {
@@ -126,6 +129,4 @@ public class ProductController {
                 .map(file -> productImageService.saveProductImage(id, file))
                 .collect(Collectors.toList());
     }
-
-
 }
