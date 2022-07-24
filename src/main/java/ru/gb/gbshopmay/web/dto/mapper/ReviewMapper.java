@@ -1,11 +1,20 @@
 package ru.gb.gbshopmay.web.dto.mapper;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.gb.gbapimay.review.dto.ReviewDto;
 import ru.gb.gbshopmay.entity.Review;
 
-public interface ReviewMapper {
+@Component
+@RequiredArgsConstructor
+public class ReviewMapper {
 
-    Review toReview(ReviewDto reviewDto);
+    private final ProductMapper productMapper;
 
-    ReviewDto toReviewDto(Review review);
+    public ReviewDto toReviewDto(Review review) {
+        return ReviewDto.builder()
+                .comment(review.getComment())
+                .product(productMapper.toProductDto(review.getProduct()))
+                .build();
+    }
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Продукт</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+<body>
+
+<div th:replace="~{common/navbar :: navi(Review)}"></div>
+
+<div class="container" align="center">
+    <h2>Отзывы о продуктах</h2>
+
+    <div class="review" th:each="review, i : ${reviews}">
+        <h5 th:text="${{review.userName}}"></h5>
+        <div th:text="${{review.text}}"></div>
+    </div>
+
+    <form action="/" th:object="${review}" th:action="@{/review}" method="post" enctype="utf8">
+        <div class="col-md-8">
+            <div class="input-group-text" id="comment">Отзыв</div>
+
+            <textarea class="col-12" rows="4" name="comment"></textarea>
+            <div class="g-recaptcha"
+                 th:attr="data-sitekey=${@captchaSettings.getSite()}"></div>
+            <span id="captchaError" class="alert alert-danger col-sm-4"
+                  style="display:none"></span>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div th:each="error, i : ${errors}" class="alert alert-danger" role="alert">
+            <div th:text="${{error}}"></div>
+        </div>
+    </form>
+</div>
+<div th:replace="~{common/footer :: footerBlock}"/>
+
+</body>
+</html>

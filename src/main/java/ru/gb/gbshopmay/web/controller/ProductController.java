@@ -1,4 +1,4 @@
-package ru.gb.gbshopmay.web.conntroller;
+package ru.gb.gbshopmay.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -9,17 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbapimay.review.dto.ReviewDto;
-import ru.gb.gbshopmay.dao.ReviewDao;
 import ru.gb.gbshopmay.service.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
-import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,9 +26,7 @@ public class ProductController {
     private final ProductImageService productImageService;
     private final CategoryService categoryService;
     private final ManufacturerService manufacturerService;
-    private final UserService userService;
     private final ReviewService reviewService;
-
 
     @GetMapping("/all")
     public String getProductList(Model model) {
@@ -60,7 +53,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     @PreAuthorize("hasAnyAuthority('product.read')")
-    public String showInfo(Model model, @PathVariable(name = "productId") Long id) {
+    public String showInfo(Model model, @PathVariable(name = "productId") Long id, ArrayList<String> errors) {
         ProductDto productDto;
         if (id != null) {
             productDto = productService.findById(id);
@@ -68,8 +61,13 @@ public class ProductController {
             return "redirect:/product/all";
         }
         List<String> images = new ArrayList<>(productImageService.uploadMultipleFilesByProductId(id));
+        List<ReviewDto> reviewDtoList = reviewService.findReviewsByProductId(id);
         model.addAttribute("productImages", images);
         model.addAttribute("product", productDto);
+        model.addAttribute("reviews", reviewDtoList);
+        if (errors != null) {
+            model.addAttribute("errors", errors);
+        }
         return "product/product-info";
     }
 
@@ -100,15 +98,6 @@ public class ProductController {
         return new byte[]{};
     }
 
-    //  todo дз 11      Сделать загрузку множества изображений
-
-//    @GetMapping(value = "/upload-multiple-files")
-//    public void uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-//        Arrays.stream(files)
-//                .map(file -> productImageService.save(file))
-//                .collect(Collectors.toList());
-//    }
-
     @PostMapping("/upload-multiple-files")
     public String uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @RequestParam("id") Long id) {
         Arrays.stream(files)
@@ -127,15 +116,5 @@ public class ProductController {
             e.printStackTrace();
         }
         return new byte[]{};
-    }
-
-    @PostMapping("/review")
-    public String addReview(ReviewDto reviewDto, HttpSession httpSession, Principal principal) {
-        userService.findByUsername(principal.getName());
-
-
-
-        reviewService.save(reviewDto);
-        return "";
     }
 }

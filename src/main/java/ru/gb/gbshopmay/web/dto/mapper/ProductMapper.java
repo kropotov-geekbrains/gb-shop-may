@@ -2,7 +2,6 @@ package ru.gb.gbshopmay.web.dto.mapper;
 
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.gb.gbapimay.category.dto.CategoryDto;
 import ru.gb.gbapimay.product.dto.ProductDto;
 import ru.gb.gbshopmay.dao.CategoryDao;

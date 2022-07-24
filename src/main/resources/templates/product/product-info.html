@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.w3.org/1999/html" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Продукт</title>
@@ -45,6 +45,11 @@
             </div>
         </div>
     </div>
+    <td sec:authorize="isAuthenticated()" class="nav-item">
+        <a type="button"
+           th:href="@{/review}" class="btn btn-warning">Отзыв</a>
+    </td>
+
 </div>
 <div th:replace="~{common/footer :: footerBlock}"/>
 

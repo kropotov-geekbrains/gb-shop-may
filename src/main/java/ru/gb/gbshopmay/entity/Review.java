@@ -1,9 +1,9 @@
 package ru.gb.gbshopmay.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.gb.gbshopmay.entity.common.BaseEntity;
 import ru.gb.gbshopmay.entity.security.AccountUser;
 
@@ -14,7 +14,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "review")
-@EntityListeners(AuditingEntityListener.class)
 public class Review extends BaseEntity {
 
     @ManyToOne
@@ -28,4 +27,12 @@ public class Review extends BaseEntity {
     private String comment;
     @Column(name = "approved")
     private boolean approved;
+
+    @Builder
+    public Review(AccountUser accountUser, Product product, String comment, boolean approved) {
+        this.accountUser = accountUser;
+        this.product = product;
+        this.comment = comment;
+        this.approved = approved;
+    }
 }

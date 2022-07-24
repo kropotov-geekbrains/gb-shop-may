@@ -1,4 +1,4 @@
-package ru.gb.gbshopmay.web.conntroller;
+package ru.gb.gbshopmay.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

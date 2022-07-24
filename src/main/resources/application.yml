@@ -20,6 +20,11 @@ spring:
       max-request-size: 10MB
       enabled: true
 
+google:
+  recaptcha:
+    key:
+      site: 6LfD3_ggAAAAACT_SDApnTDICh8oglI7sb7D1sHk
+      secret: 6LfD3_ggAAAAAPu5j0s9G8kfpcyviX3W0vygPJ1l
 
 
 # /{label}/{application}-{profile}.yml
