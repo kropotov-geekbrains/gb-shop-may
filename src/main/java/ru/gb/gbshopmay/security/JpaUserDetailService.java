@@ -12,12 +12,17 @@ import ru.gb.gbapimay.exception.UsernameAlreadyExistsException;
 import ru.gb.gbapimay.security.UserDto;
 import ru.gb.gbshopmay.dao.security.AccountRoleDao;
 import ru.gb.gbshopmay.dao.security.AccountUserDao;
+//import ru.gb.gbshopmay.dao.security.ConfirmationTokenDao;
+//import ru.gb.gbshopmay.entity.ConfirmationToken;
 import ru.gb.gbshopmay.entity.security.AccountRole;
 import ru.gb.gbshopmay.entity.security.AccountUser;
 import ru.gb.gbshopmay.entity.security.enums.AccountStatus;
 import ru.gb.gbshopmay.service.UserService;
 import ru.gb.gbshopmay.web.dto.mapper.UserMapper;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +36,7 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
     private final AccountRoleDao accountRoleDao;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+//    private final ConfirmationTokenDao confirmationTokenDao;
 
     @Override
     @Transactional
@@ -38,7 +44,6 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         return accountUserDao.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("Username: " + username + " not found")
         );
-
     }
 
     // todo дз 9 поменять, чтобы пользователь был вообще без прав пока не введ код подтверждения из консоли
@@ -46,7 +51,7 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
     @Override
     public UserDto register(UserDto userDto) {
         if (accountUserDao.findByUsername(userDto.getUsername()).isPresent()) {
-            throw  new UsernameAlreadyExistsException(String.format(
+            throw new UsernameAlreadyExistsException(String.format(
                     "User with username %s already exists", userDto.getUsername()));
         }
         AccountUser accountUser = userMapper.toAccountUser(userDto);
@@ -118,6 +123,20 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         disable(accountUser);
         update(accountUser);
     }
+
+//    @Override
+//    public void createConfirmationToken(UserDto user, String token) {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+//        calendar.add(Calendar.MINUTE, 3000);
+//        ConfirmationToken myToken = ConfirmationToken.builder().confirmationToken(token).accountUser(userMapper.toAccountUser(user)).expiryDate(new Date(calendar.getTime().getTime())).build();
+//        confirmationTokenDao.save(myToken);
+//    }
+//
+//    @Override
+//    public ConfirmationToken getConfirmationToken(String token) {
+//        return confirmationTokenDao.findConfirmationTokenByToken(token);
+//    }
 
     private void enable(final AccountUser accountUser) {
         accountUser.setStatus(AccountStatus.ACTIVE);

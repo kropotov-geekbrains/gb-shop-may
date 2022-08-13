@@ -2,6 +2,7 @@ package ru.gb.gbshopmay.service;
 
 
 import ru.gb.gbapimay.security.UserDto;
+//import ru.gb.gbshopmay.entity.ConfirmationToken;
 import ru.gb.gbshopmay.entity.security.AccountUser;
 
 import java.util.List;
@@ -19,5 +20,6 @@ public interface UserService {
     UserDto findById(Long id);
     List<UserDto> findAll();
     void deleteById(Long id);
-    // todo дз 9 добавить метод обработки кода подтверждения
+//    void createConfirmationToken(UserDto user, String token);
+//    ConfirmationToken getConfirmationToken(String token);
 }
